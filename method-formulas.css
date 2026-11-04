@@ -1,0 +1,27 @@
+.mf-playground { border-color:#9bbfc6; }
+.mf-playground > header { border-bottom:1px solid #c9dce0; }
+.mf-controls { display:flex; flex-wrap:wrap; align-items:flex-end; gap:18px; padding:23px; background:#f4f9f7; }
+.mf-controls label { display:grid; gap:9px; flex:1 1 220px; font-size:.83em; font-weight:750; line-height:1.8; min-width:0; }
+.mf-controls input[type=range] { width:100%; accent-color:#008896; min-height:30px; }.mf-controls output { color:#007a87; font-size:1.2em; }
+.mf-controls select { font:inherit; padding:10px; background:white; color:#17394c; border:1px solid #9cbac6; border-radius:8px; min-width:0; }
+.mf-controls button { font:inherit; padding:12px 17px; background:#17394c; color:white; border:1px solid #17394c; border-radius:9px; line-height:1.7; cursor:pointer; }
+.mf-atom-choices { flex:1 0 100%; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+.mf-demo-size { flex:1 0 100%; margin:0; font-size:.81em; line-height:1.8; color:#466775; }
+.mf-atom-choices button { background:white; color:#17394c; border:1px solid #b5cdd3; }.mf-atom-choices small { display:block; font-size:.85em; margin-top:7px; }.mf-atom-choices button[aria-pressed=true] { border:2px solid #008896; background:#e0f1ec; }
+.mf-result { padding:24px; min-width:0; }.mf-result p { line-height:1.85; font-size:.87em; }.mf-result h4 { font-size:1.02em; line-height:1.75; margin:0 0 13px; }
+.mf-result a { color:#106476; line-height:1.8; font-size:.87em; }
+.mf-fixed { padding:15px; border-left:3px solid #008896; background:#edf6f2; margin:0 0 22px; }
+.mf-projection-pair,.mf-transfer-columns { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:20px 0; }
+.mf-projection-pair > article,.mf-transfer-columns > section { padding:19px; border:1px solid #bdd2d9; border-radius:12px; background:white; min-width:0; }
+.mf-result svg { display:block; width:100%; height:auto; background:#f7faf9; border-radius:9px; }.mf-result svg text { font:12px sans-serif; fill:#526f7a; }
+.mf-vector { display:grid; gap:9px; padding:15px; background:#eff4f6; border:1px solid #ccdbe0; border-radius:9px; font-size:.88em; margin:13px 0; line-height:1.65; font-variant-numeric:tabular-nums; }.mf-vector > strong { font-size:1em; }
+.mf-formula { padding:16px; border:1px solid #b4d0d4; border-radius:10px; background:#eaf4f0; margin:17px 0; overflow-wrap:anywhere; line-height:1.85; }.mf-formula > strong { display:block; font-size:.93em; font-variant-numeric:tabular-nums; }.mf-formula > .i18n-unit { display:block; margin-top:10px; font-size:.73em; color:#3c6770; }
+.mf-calculation { border:1px solid #c2d7df; padding:20px; background:white; border-radius:12px; margin-top:22px; }
+.mf-product { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px; margin:20px 0; }.mf-product > span { display:grid; flex:1 1 170px; gap:10px; font-size:.75em; line-height:1.8; text-align:center; }.mf-product strong { font-size:1.6em; color:#175568; }.mf-product > b { color:#a26527; }
+.mf-table { overflow-x:auto; max-width:100%; margin:16px 0; }.mf-table table { width:100%; min-width:430px; border-collapse:collapse; background:white; font-size:.76em; line-height:1.8; }.mf-table th,.mf-table td { border:1px solid #c4d7df; padding:12px; text-align:left; vertical-align:top; }.mf-table th { background:#e9f1f4; }.mf-table td { font-variant-numeric:tabular-nums; }
+.mf-calculation details { padding:14px; background:#f3f7f8; border:1px solid #c2d7df; border-radius:9px; margin-top:18px; }.mf-calculation summary { cursor:pointer; font-size:.83em; line-height:1.75; font-weight:750; }
+.mf-status,.mf-warning { padding:17px; background:#fff4e4; border-left:3px solid #bd752a; line-height:1.9; }
+.mf-boundary { font-size:.73em !important; line-height:1.9; color:#536d78; margin:22px 0 0; }
+html[data-language=bilingual] .mf-controls > button .i18n-zh { color:#d3e6ee; }
+@media(max-width:1050px) { .mf-transfer-columns { grid-template-columns:1fr; } }
+@media(max-width:700px) { .mf-projection-pair { grid-template-columns:1fr; }.mf-controls,.mf-result { padding:17px; }.mf-atom-choices { grid-template-columns:1fr 1fr; }.mf-product { flex-direction:column; }.mf-product > span { flex-basis:auto; }.mf-calculation { padding:15px; } }

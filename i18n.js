@@ -1350,6 +1350,7 @@
   }
 
   function applyMode(nextMode, { persist = true } = {}) {
+    if(window.ReportProjection?.isAudience){nextMode='en';persist=false;}
     mode = VALID_MODES.has(nextMode) ? nextMode : "en";
     document.documentElement.dataset.language = mode;
     document.documentElement.lang = mode === "zh" ? "zh-Hant" : "en";
@@ -1367,10 +1368,17 @@
   }
 
   function init() {
+    if(!window.ReportProjection?.isAudience)mode='bilingual';
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (VALID_MODES.has(saved)) mode = saved;
-    } catch (_) { /* Use English when storage is unavailable. */ }
+      if (VALID_MODES.has(saved)&&!window.ReportProjection?.isAudience) mode = saved;
+      // First visit to the speaker-tools release starts bilingual; later choices are respected.
+      if(!window.ReportProjection?.isAudience&&localStorage.getItem('hyperspectral-speaker-language-v1')!=='set') {
+        mode='bilingual';
+        localStorage.setItem(STORAGE_KEY,mode);
+        localStorage.setItem('hyperspectral-speaker-language-v1','set');
+      }
+    } catch (_) { /* Bilingual presenter / English audience when storage is unavailable. */ }
     localizeTree(document.body);
     const select = document.getElementById("languageSelect");
     select?.addEventListener("change", () => applyMode(select.value));

@@ -1,0 +1,52 @@
+/* Compact left rail; the existing shell:menu adapter controls expansion in both views. */
+.report-sidebar { --report-rail:68px; --report-sidebar:216px; --report-left:var(--report-rail); }
+.report-sidebar.sidebar-expanded { --report-left:var(--report-sidebar); }
+.report-sidebar .site-header { position:fixed; top:0; left:0; width:var(--report-left); z-index:110; border-right:1px solid #bdced5; }
+.report-sidebar .header-inner { min-height:0; max-width:none; padding:13px 10px; flex-direction:column; align-items:stretch; gap:13px; }
+.report-sidebar .brand { gap:8px; min-width:0; }
+.report-sidebar .brand-mark { flex:0 0 32px; width:32px; height:32px; font-size:21px; }
+.report-sidebar .brand strong { font-size:.72em; overflow-wrap:anywhere; }
+.report-sidebar .brand small { font-size:.59em; line-height:1.6; }
+.report-sidebar .header-actions { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:7px; }
+.report-sidebar .language-control,.report-sidebar #menuButton { grid-column:1/-1; }
+.report-sidebar .language-control select { width:100%; min-height:34px; padding:6px 10px; font-size:.72em; border-radius:8px; }
+.report-sidebar .mode-button,.report-sidebar .menu-button,.report-sidebar #speakerToolsToggle { min-width:0; min-height:36px; max-width:none; width:100%; padding:7px; border-radius:9px; font-size:.65em; white-space:normal; justify-content:center; text-align:center; line-height:1.5; }
+.report-sidebar .mode-button { gap:4px; }
+.report-sidebar #menuButton { justify-content:space-between; padding-inline:12px; }
+.sidebar-tool-icon { font-size:1.3em; }
+.report-sidebar #speakerToolsToggle::before { content:none; }
+.report-sidebar .chapter-nav { position:fixed; top:var(--site-header-height); left:0; bottom:0; width:var(--report-left); max-width:none; margin:0; padding:7px 9px 18px; border-right:1px solid #bdced5; border-bottom:0; display:flex; flex-direction:column; gap:4px; overflow-y:auto; overflow-x:hidden; z-index:105; }
+.report-sidebar .chapter-nav a { flex:0 0 auto; min-width:0; padding:9px 10px; font-size:.72em; line-height:1.55; overflow-wrap:anywhere; }
+.report-sidebar .chapter-nav .i18n-zh { font-size:.88em; }
+.report-sidebar main { margin-left:var(--report-left); }
+.report-sidebar body > footer { margin-left:var(--report-left); }
+.report-sidebar main > .chapter,.report-sidebar main > .sources-section { padding-top:42px; }
+.report-sidebar main [id] { scroll-margin-top:24px; }
+.report-sidebar:not(.sidebar-expanded) .brand { justify-content:center; }
+.report-sidebar:not(.sidebar-expanded) .brand > span:not(.brand-mark) { display:none; }
+.report-sidebar:not(.sidebar-expanded) .header-actions { display:flex; flex-direction:column; align-items:stretch; }
+.report-sidebar:not(.sidebar-expanded) .mode-label,.report-sidebar:not(.sidebar-expanded) .menu-label,.report-sidebar:not(.sidebar-expanded) .sidebar-tool-label { display:none; }
+.report-sidebar:not(.sidebar-expanded) #menuButton { justify-content:center; }
+.report-sidebar:not(.sidebar-expanded) .language-control select { font-size:10px; padding:5px 1px; text-align:center; appearance:none; }
+.report-sidebar:not(.sidebar-expanded) .mode-button,.report-sidebar:not(.sidebar-expanded) .menu-button { min-height:38px; font-size:.95em; }
+.report-sidebar #projectorBar { grid-column:1/-1; font-size:.58em; line-height:1.5; overflow-wrap:anywhere; }
+.report-sidebar #projectorFullscreen { max-width:100%; font-size:1em; padding:6px; }
+.report-sidebar .projection-panel { top:14px; left:calc(var(--report-left) + 12px); right:12px; max-height:calc(100dvh - 28px); }
+.report-sidebar #speakerDock { left:calc(var(--report-left) + 10px); }
+.report-sidebar .skip-link { left:calc(var(--report-left) + 10px); }
+.paper-playground { margin:32px 0; border:1px solid #a9c9cf; border-top:5px solid #008896; border-radius:18px; background:#f2f8f7; overflow:visible; }
+.paper-playground > header { padding:24px 25px 8px; }
+.paper-playground > header > .eyebrow { margin:0 0 9px; color:#007480; }
+.paper-playground > header h3 { margin:0 0 14px; font-size:1.2em; line-height:1.65; }
+.paper-playground > header > p:last-child { margin:0; font-size:.88em; line-height:1.85; color:#426370; }
+.paper-playground-mount { padding:0 18px 20px; }
+.paper-playground .cx-lab,.paper-playground .lit-lab { margin:15px 0 0; }
+.paper-playground .cx-lab > header .eyebrow { display:none; }
+.paper-playground .cx-lab > header h3 { font-size:1.03em; }
+.paper-playground-loading { padding:20px 25px; }
+.paper-playground-jump { display:inline-block; margin-top:10px; padding:10px 15px; border:1px solid #8ab6bb; border-radius:9px; background:#e8f4f1; color:#006d7c; text-decoration:none; font-size:.79em; font-weight:750; line-height:1.6; }
+.paper-playground-jump:is(:hover,.projection-hover) { background:#d6ece7; outline:2px solid #008896; }
+.paper-playground :is(button,input,select,summary):focus-visible { outline:3px solid #c57929; outline-offset:3px; }
+@media(max-width:1200px) { .paper-playground .cx-workbench { grid-template-columns:1fr; }.paper-playground .cx-controls { display:grid; grid-template-columns:1fr 1fr; }.paper-playground .cx-control { grid-column:1/-1; } }
+@media(max-width:999px) { .report-sidebar.sidebar-expanded main,.report-sidebar.sidebar-expanded body > footer { margin-left:var(--report-rail); }.report-sidebar.sidebar-expanded .site-header,.report-sidebar.sidebar-expanded .chapter-nav { box-shadow:8px 0 28px #14213d24; }.report-sidebar.sidebar-expanded #speakerDock { left:calc(var(--report-rail) + 10px); } }
+@media(max-width:600px) { .report-sidebar { --report-rail:54px; --report-sidebar:min(230px,85vw); }.report-sidebar .header-inner { padding:10px 5px; }.report-sidebar main > .chapter,.report-sidebar main > .sources-section { padding-inline:14px; padding-top:28px; }.paper-playground > header { padding:20px 14px 8px; }.paper-playground-mount { padding:0 8px 14px; }.paper-playground .cx-workbench { padding:14px 10px; }.paper-playground .cx-controls { grid-template-columns:1fr; }.paper-playground .fd-controls,.paper-playground .fd-output { padding-inline:12px; }.report-sidebar .projection-panel { left:calc(var(--report-rail) + 5px); margin:0; }.report-sidebar #speakerDock { left:calc(var(--report-rail) + 4px); right:4px; } }

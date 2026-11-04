@@ -1,0 +1,27 @@
+/* Projection is a separate English window, not a larger-font page mode. */
+.projection-panel { position:fixed; top:calc(var(--site-header-height) + 8px); left:18px; right:18px; z-index:140; margin:0 auto; padding:18px 22px; max-width:var(--content); max-height:calc(100dvh - var(--site-header-height) - 28px); overflow:auto; background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); display:flex; flex-wrap:wrap; gap:14px 22px; }
+.projection-panel[hidden] { display:none; }
+.projection-panel > div:first-child { flex:1 1 440px; }
+.projection-panel strong > span,.projection-panel p > span,.projection-actions > * > span,.mode-label > span { display:block; }
+.projection-panel p { margin:8px 0 0; font-size:.83em; color:var(--muted); }
+.projection-actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+.projection-actions a,.projection-actions button,#projectorFullscreen { display:inline-block; border:1px solid var(--line); border-radius:10px; padding:10px 14px; background:var(--surface-soft); color:var(--ink); font:inherit; font-size:.83em; cursor:pointer; text-decoration:none; }
+.mode-button[aria-pressed="true"]:is(:hover,.projection-hover) { background:var(--navy); color:#fff; }
+.projector-view .language-control,.projector-view #presentMode { display:none !important; }
+#projectorBar { display:flex; flex-wrap:wrap; align-items:center; gap:12px; font-size:.82em; }
+#projectorStatus { color:var(--muted); }
+.projector-view { scroll-behavior:auto; }
+.projector-awaiting main { visibility:hidden; }
+.projector-stopped main { opacity:.35; }
+#projectionCursor { position:fixed; left:0; top:0; width:28px; height:35px; pointer-events:none; z-index:1000; filter:drop-shadow(0 2px 3px #0008); }
+#projectionCursor[hidden] { display:none; }
+#projectionCursor svg { display:block; overflow:visible; fill:#14213d; stroke:#fff; stroke-width:2; stroke-linejoin:round; }
+#projectionCursor .cursor-hand { display:none; }
+#projectionCursor[data-kind="hand"] .cursor-hand { display:block; }
+#projectionCursor[data-kind="hand"] .cursor-arrow { display:none; }
+#projectionCursor span { position:absolute; left:-9px; top:-9px; width:26px; height:26px; border:3px solid var(--cyan); border-radius:50%; opacity:0; }
+#projectionCursor.is-pressed span { opacity:.85; }
+:is(.cx-controls,.fd-controls,.lit-controls) button:is(:hover,.projection-hover):not(:disabled),
+#chapterNav a:is(:hover,.projection-hover),.menu-button:is(:hover,.projection-hover) { outline:2px solid var(--cyan); outline-offset:2px; }
+:is(button,[role="button"],summary):is(:active,.projection-pressed) { box-shadow:inset 0 0 0 3px #008c9e80; }
+@media(max-width:720px) { .projection-panel { margin:12px; padding:15px; }.projection-actions { width:100%; }#projectorBar { gap:5px; }#projectorStatus { max-width:170px; } }

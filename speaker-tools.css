@@ -1,0 +1,45 @@
+/* Private speaker controls never render in the actual audience window. */
+#speakerToolsToggle { font-size:.78em; }
+@media(max-width:1100px) { #speakerToolsToggle { max-width:130px; padding:8px; font-size:.7em; white-space:normal; } }
+#speakerDock { position:fixed; left:12px; right:12px; bottom:10px; z-index:150; padding:12px 16px; max-height:76dvh; overflow:auto; border:1px solid var(--line); border-top:3px solid var(--cyan); border-radius:14px; background:var(--surface); box-shadow:0 -8px 32px #14213d24; }
+#speakerDock[hidden],#speakerDock [hidden] { display:none !important; }
+.speaker-toolbar { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.speaker-toolbar strong { font-size:.83em; margin-right:auto; }
+#speakerDock button { padding:7px 10px; border:1px solid var(--line); border-radius:8px; font:inherit; font-size:.72em; line-height:1.4; background:var(--surface-soft); color:var(--ink); cursor:pointer; }
+#speakerDock button[aria-pressed="true"] { background:var(--navy); color:#fff; }
+#speakerDock button:hover { outline:2px solid var(--cyan); outline-offset:1px; }
+#speakerDock button:disabled { opacity:.5; cursor:default; outline:none; }
+#speakerDock p { font-size:.72em; line-height:1.5; margin:7px 0; color:var(--muted); }
+.speaker-position { display:flex; align-items:center; flex-wrap:wrap; gap:6px 12px; margin:7px 0; }
+#speakerFollow { margin-left:auto; }
+.speaker-instructions { font-size:.7em; }
+.speaker-instructions summary { cursor:pointer; }
+#speakerViewStatus { font-size:.7em; color:var(--muted); }
+#speakerSelectionStatus { display:block; font-size:.72em; line-height:1.6; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin:4px 0; }
+#speakerPreviewHost:empty { display:none; }
+#speakerPreviewHost { position:relative; height:32dvh; min-height:170px; max-height:calc(76dvh - 180px); overflow:hidden; resize:vertical; border:1px solid var(--line); border-radius:8px; background:var(--paper); }
+#speakerPreviewClip { position:absolute; inset:0; overflow:clip; }
+#speakerPreview { position:absolute; display:block; left:0; top:0; max-width:none; border:0; transform-origin:0 0; background:var(--paper); }
+#speakerViewportStatus { display:block; font-size:.68em; color:var(--muted); margin:3px 0; }
+#speakerViewportStatus[data-aligned="true"] { color:var(--cyan-dark); }
+body.speaker-tools-open { padding-bottom:calc(var(--speaker-dock-height,170px) + 22px); }
+.speaker-preview #projectionCursor { display:none !important; }
+.speaker-preview { scroll-behavior:auto; }
+.speaker-preview main { user-select:text; -webkit-user-select:text; }
+.speaker-preview main :is(input,select,textarea,button,a,summary,[role="button"]) { cursor:default; }
+.projector-view #speakerDock,.projector-view #speakerToolsToggle { display:none !important; }
+main .report-spotlight { outline:3px solid #d17b21; outline-offset:5px; border-radius:5px; background-color:#f3c15d26; }
+main .report-pointer-focus { outline:2px solid var(--cyan); outline-offset:4px; background-color:#008a9a16; }
+.dark-section .report-spotlight { background-color:#f3c15d1c; }
+::highlight(report-selection) { background:#ffe08c; color:#14213d; }
+.report-selection-rect { position:fixed; z-index:90; background:#ffcf5370; pointer-events:none; border-radius:2px; }
+@media(max-width:720px) {
+  #speakerDock { left:6px; right:6px; bottom:6px; padding:9px; max-height:78dvh; }
+  #speakerPreviewHost { height:36dvh; }
+  .speaker-toolbar strong { width:100%; }
+  #speakerToolsToggle { padding:7px 9px; }
+}
+@media(max-width:600px) {
+  #speakerToolsToggle { flex:0 0 44px; width:44px; min-height:42px; font-size:0; }
+  #speakerToolsToggle::before { content:'✎'; font:800 20px/1 sans-serif; }
+}

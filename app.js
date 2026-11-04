@@ -27,7 +27,7 @@
     { id: 'conclusions', title: '論文能證明什麼、不能證明什麼' }
   ];
   const topicPages = window.ReportConcepts?.pages || legacyTopicPages;
-  const auxiliaryPages = [...(window.ReportConcepts ? legacyTopicPages : []), { id: 'sources', title: '論文與公開資源' }];
+  const auxiliaryPages = [...(window.ReportConcepts ? legacyTopicPages : []), ...(window.ReportPaper?.pages || []), {id:'knowledge-directory',title:'補充知識點'}, { id: 'sources', title: '論文與公開資源' }];
   let updateReadingProgress = () => {};
 
   const makeSvg = (tag, attrs = {}, text = "") => {
@@ -162,52 +162,62 @@
     addEventListener('resize', updateReadingProgress);
     updateReadingProgress();
 
-    const presentButton = $('#presentMode');
-    const presentLabel = $('.mode-label', presentButton);
-    presentButton.addEventListener('click', () => {
-      const active = document.body.classList.toggle('presentation-mode');
-      presentButton.setAttribute('aria-pressed', String(active));
-      presentLabel.textContent = active ? '一般模式' : '投影模式';
-    });
-
     const menuButton = $('#menuButton');
     const nav = $('#chapterNav');
     const menuLabel = $('.menu-label', menuButton);
     const syncMenuLabel = () => {
       const open = menuButton.getAttribute('aria-expanded') === 'true';
       const mode = window.ReportI18n?.getMode?.() || 'en';
-      const en = open ? 'Hide Topics' : 'Show Topics';
+      const en = open ? 'Collapse' : 'Contents';
       const zh = open ? '收起導覽' : '展開導覽';
       menuLabel.replaceChildren();
       for (const text of mode === 'bilingual' ? [en, zh] : [mode === 'zh' ? zh : en]) {
         const line = document.createElement('span'); line.textContent = text; menuLabel.append(line);
       }
       menuButton.setAttribute('aria-label', mode === 'bilingual' ? `${en} / ${zh}` : mode === 'zh' ? zh : en);
-      $('.menu-icon', menuButton).textContent = open ? '⌃' : '☰';
+      $('.menu-icon', menuButton).textContent = open ? '‹' : '☰';
+      const speaker = $('#speakerToolsToggle');
+      const speakerLabel = speaker?.querySelector('.sidebar-tool-label');
+      const speakerText = mode === 'bilingual' ? 'Speaker Tools / 講者工具' : mode === 'zh' ? '講者工具' : 'Speaker Tools';
+      if (speakerLabel) { speakerLabel.textContent = speakerText; speaker.setAttribute('aria-label', speakerText); }
     };
     const setMenuOpen = (open) => {
       nav.hidden = !open;
       nav.classList.toggle('is-open', open);
+      document.documentElement.classList.toggle('sidebar-expanded', open);
       menuButton.setAttribute('aria-expanded', String(open));
       syncMenuLabel();
+      window.ReportProjection?.notify();
     };
-    setMenuOpen(false);
+    const speakerToggle=$('#speakerToolsToggle');
+    if(speakerToggle&&!speakerToggle.querySelector('.sidebar-tool-icon')){
+      const text=speakerToggle.textContent;speakerToggle.textContent='';
+      const icon=document.createElement('span');icon.className='sidebar-tool-icon';icon.textContent='✎';icon.setAttribute('aria-hidden','true');
+      const label=document.createElement('span');label.className='sidebar-tool-label';label.textContent=text;speakerToggle.append(icon,label);
+      speakerToggle.setAttribute('aria-label',text);
+    }
+    setMenuOpen(window.innerWidth>=1000);
     menuButton.addEventListener('click', () => setMenuOpen(nav.hidden));
     // Delegation also covers the directory links replaced during initialization.
     nav.addEventListener('click', (event) => {
-      if (event.target.closest('a')) setMenuOpen(false);
+      if (event.target.closest('a')&&window.innerWidth<1000) setMenuOpen(false);
     });
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && !nav.hidden) {
+      if (!window.ReportProjection?.isAudience && event.key === 'Escape' && !nav.hidden) {
         setMenuOpen(false); menuButton.focus();
       }
     });
     document.addEventListener('click', (event) => {
+      if (window.ReportProjection?.isAudience) return;
       const path = event.composedPath();
-      if (!nav.hidden && !path.includes(nav) && !path.includes(menuButton)) setMenuOpen(false);
+      if (window.innerWidth<1000&&!nav.hidden && !path.includes(nav) && !path.includes(menuButton)) setMenuOpen(false);
     });
-    window.addEventListener('hashchange', () => setMenuOpen(false));
+    window.addEventListener('hashchange', () => {if(window.innerWidth<1000)setMenuOpen(false);});
     document.addEventListener('reportlanguagechange', syncMenuLabel);
+    window.ReportProjection?.register('shell:menu', {
+      get: () => ({open: !nav.hidden, x: nav.scrollLeft / Math.max(1, nav.scrollWidth - nav.clientWidth),y:nav.scrollTop/Math.max(1,nav.scrollHeight-nav.clientHeight)}),
+      set: (state) => {setMenuOpen(!!state.open);nav.scrollLeft=(state.x||0)*Math.max(0,nav.scrollWidth-nav.clientWidth);nav.scrollTop=(state.y||0)*Math.max(0,nav.scrollHeight-nav.clientHeight);}
+    });
     const updateHeaderHeight = () => document.documentElement.style.setProperty('--site-header-height', `${Math.ceil($('#top').getBoundingClientRect().height)}px`);
     updateHeaderHeight();
     if (window.ResizeObserver) new ResizeObserver(updateHeaderHeight).observe($('#top'));
@@ -324,8 +334,8 @@
       if (token === null) {
         return { page: landingPage, route: 'overview', target: null, invalid: true };
       }
-      if (!token || token === 'overview' || token === 'opening' || token === 'main-content' || token === 'top' || token === 'paper-overview' || token === 'knowledge-directory') {
-        const target = token === 'paper-overview' || token === 'knowledge-directory' ? document.getElementById(token) : token === 'opening' ? landingPage : null;
+      if (!token || token === 'overview' || token === 'opening' || token === 'main-content' || token === 'top' || token === 'paper-overview') {
+        const target = token === 'paper-overview' ? document.getElementById(token) : token === 'opening' ? landingPage : null;
         return { page: landingPage, route: 'overview', target };
       }
       const directPage = reportPageById.get(token);
@@ -362,6 +372,7 @@
       pages.forEach((page) => { page.hidden = page !== resolved.page; });
       activePage = resolved.page;
       window.ReportConcepts?.mountVisible();
+      window.ReportPlaygrounds?.mountVisible();
       document.documentElement.classList.add('is-paginated');
 
       if (resolved.target?.id) {
@@ -1242,6 +1253,7 @@
       $('#ksvdAfterError').textContent = bestDirectionError.toFixed(3);
       updateKsvdSampleReadout();
       drawKsvd();
+      window.ReportProjection?.notify();
     };
     const setKsvdStep = (nextStep) => {
       ksvdStep = Math.max(0, Math.min(ksvdStages.length - 1, nextStep));
@@ -1268,6 +1280,7 @@
       ksvdYaw = ksvdDrag.yaw + (event.clientX - ksvdDrag.x) * 0.008;
       ksvdPitch = Math.max(-0.9, Math.min(0.9, ksvdDrag.pitch - (event.clientY - ksvdDrag.y) * 0.006));
       drawKsvd();
+      window.ReportProjection?.notify();
     });
     const endKsvdDrag = () => { ksvdDrag = null; ksvdSvg.classList.remove('is-dragging'); };
     ksvdSvg.addEventListener('pointerup', endKsvdDrag);
@@ -1282,6 +1295,7 @@
       drawKsvd();
     });
     renderKsvd();
+    window.ReportProjection?.register('legacy:ksvd-view',{get:()=>({yaw:ksvdYaw,pitch:ksvdPitch}),set:value=>{ksvdYaw=value.yaw;ksvdPitch=value.pitch;drawKsvd();}});
 
     const ompData = [
       { name: '原子 1', values: [0.72, 0.35, 0.18] },

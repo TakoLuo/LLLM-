@@ -5,16 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="A bilingual interactive guide to Sparse Recovery of Hyperspectral Signal from Natural RGB Images, including its concepts, equations, experiments, and limitations.">
   <title>Sparse Recovery of Hyperspectral Signal from Natural RGB Images</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="concepts.css">
-  <link rel="stylesheet" href="foundation-labs.css?v=23">
+  <link rel="stylesheet" href="styles.css?v=25">
+  <link rel="stylesheet" href="concepts.css?v=49">
+  <link rel="stylesheet" href="foundation-labs.css?v=29">
   <link rel="stylesheet" href="literature.css?v=22">
-  <script src="i18n.js" defer></script>
-  <script src="concept-data.js?v=23" defer></script>
-  <script src="foundation-labs.js?v=23" defer></script>
-  <script src="literature.js?v=22" defer></script>
-  <script src="concepts.js?v=22" defer></script>
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="projection.css?v=26">
+  <link rel="stylesheet" href="speaker-tools.css?v=28">
+  <link rel="stylesheet" href="paper-mainline.css?v=35">
+  <link rel="stylesheet" href="sidebar-playgrounds.css?v=36">
+  <script src="projection-pointer.js?v=28" defer></script>
+  <script src="projection.js?v=28" defer></script>
+  <script src="speaker-tools.js?v=28" defer></script>
+  <script src="i18n.js?v=26" defer></script>
+  <script src="concept-data.js?v=48" defer></script>
+  <script src="foundation-labs.js?v=36" defer></script>
+  <script src="literature.js?v=36" defer></script>
+  <script src="concepts.js?v=50" defer></script>
+  <link rel="stylesheet" href="paper-guide.css?v=41">
+  <script src="paper-mainline.js?v=45" defer></script>
+  <script src="paper-playgrounds.js?v=44" defer></script>
+  <link rel="stylesheet" href="algorithm-focus.css?v=46">
+  <link rel="stylesheet" href="formula-reading.css?v=45">
+  <script src="formula-reading.js?v=45" defer></script>
+  <script src="algorithm-focus.js?v=50" defer></script>
+  <script src="paper-guide.js?v=44" defer></script>
+  <link rel="stylesheet" href="paper-structure.css?v=42">
+  <script src="paper-structure.js?v=44" defer></script>
+  <link rel="stylesheet" href="method-formulas.css?v=44">
+  <script src="method-formulas.js?v=50" defer></script>
+  <link rel="stylesheet" href="research-purpose.css?v=47">
+  <script src="research-purpose.js?v=47" defer></script>
+  <link rel="stylesheet" href="playground-connections.css?v=47">
+  <script src="playground-connections.js?v=50" defer></script>
+  <link rel="stylesheet" href="equation-stories.css?v=50">
+  <script src="equation-contracts.js?v=50" defer></script>
+  <script src="equation-stories.js?v=50" defer></script>
+  <script src="app.js?v=36" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">跳到目前頁面內容</a>
@@ -34,8 +60,8 @@
             <option value="zh">中文</option>
           </select>
         </label>
-        <button class="mode-button" id="presentMode" type="button" aria-pressed="false">
-          <span aria-hidden="true">▣</span><span class="mode-label">投影模式</span>
+        <button class="mode-button" id="presentMode" type="button" aria-pressed="false" aria-controls="projectionPanel" data-i18n-skip>
+          <span aria-hidden="true">▣</span><span class="mode-label">Projection</span>
         </button>
         <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="chapterNav" aria-label="Show Topics" data-i18n-skip>
           <span class="menu-icon" aria-hidden="true">☰</span><span class="menu-label">Show Topics</span>

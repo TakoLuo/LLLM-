@@ -1,0 +1,88 @@
+/* Section 4.1: one fixed paired dictionary, one fitted w, three distinct formula tasks. */
+(() => {
+  'use strict';
+  const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const b=p=>`<span class="i18n-unit i18n-block" data-i18n-skip><span class="i18n-en" lang="en">${esc(p[1])}</span><span class="i18n-separator" aria-hidden="true"> / </span><span class="i18n-zh" lang="zh-Hant">${esc(p[0])}</span></span>`;
+  const t=p=>document.documentElement.dataset.language==='zh'?p[0]:p[1];
+  const dot=(a,c)=>a.reduce((s,v,i)=>s+v*c[i],0),norm=a=>Math.sqrt(dot(a,a));
+  const f=(v,n=4)=>Math.abs(v)<.5*10**-n?(0).toFixed(n):v.toFixed(n),vec=(v,n=4)=>`(${v.map(x=>f(x,n)).join(', ')})`;
+  const waves=Array.from({length:31},(_,j)=>400+10*j),g=(x,c,w)=>Math.exp(-.5*((x-c)/w)**2);
+  const atoms=[455,545,640].map(c=>waves.map(x=>.08+.7*g(x,c,38)));
+  atoms.push(waves.map(x=>.2+.3*g(x,585,95)));
+  const R=[[610,45],[540,40],[460,35]].map(([c,w])=>{const r=waves.map(x=>g(x,c,w)),sum=r.reduce((s,v)=>s+v,0);return r.map(v=>v/sum);});
+  const project=h=>R.map(row=>dot(row,h)),partners=atoms.map(project);
+  const combine=(columns,w)=>columns[0].map((_,j)=>columns.reduce((s,col,i)=>s+col[j]*w[i],0));
+  // Query generation is isolated from fitRgb: the solver receives only RGB and the fixed RGB dictionary.
+  const queries=[[.7,0,.25,0],[.2,.55,.3,0]].map(w=>project(combine(atoms,w)));
+  function fitRgb(c,budget=3){
+    if(c.length!==3||!c.every(Number.isFinite)||!Number.isInteger(budget)||budget<1||budget>3)throw new RangeError('Use three finite linear measurements and a budget of 1–3');
+    const fit=window.ReportConcepts.math.fit;let selected=[],result=fit([],c);
+    while(selected.length<budget&&norm(result.residual)>1e-10){
+      const order=partners.map((a,i)=>({i,score:Math.abs(dot(a,result.residual))/norm(a)})).filter(x=>!selected.includes(x.i)).sort((a,c)=>c.score-a.score||a.i-c.i);
+      let next=null;for(const item of order){const ids=[...selected,item.i],candidate=fit(ids.map(i=>partners[i]),c);if(candidate){next={ids,candidate};break;}}
+      if(!next)break;selected=next.ids;result=next.candidate;
+    }
+    const w=atoms.map(()=>0);selected.forEach((id,i)=>w[id]=result.weights[i]);
+    return {w,selected,estimate:result.estimate,residual:result.residual,error:norm(result.residual)};
+  }
+  function transfer(w){
+    if(w.length!==atoms.length||!w.every(Number.isFinite))throw new RangeError('Use one finite coefficient per paired atom');
+    const h=combine(atoms,w),fromRgb=combine(partners,w),back=project(h);
+    return {h,fromRgb,back,products:atoms.map((h,i)=>h.map(v=>v*w[i])),identityError:norm(back.map((v,k)=>v-fromRgb[k]))};
+  }
+  const state={atom:0,band:15,channel:0,query:0,budget:3,solved:false,outputBand:15,termsOpen:false};
+  let roots;
+  const channels=['R','G','B'];
+  const table=(heads,rows)=>`<div class="mf-table"><table><thead><tr>${heads.map(p=>`<th scope="col">${b(p)}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${row.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  const formula=(text,label)=>`<div class="mf-formula"><strong>${esc(text)}</strong>${label?b(label):''}</div>`;
+  const vectorRow=(name,values)=>`<div class="mf-vector"><strong>${esc(name)}</strong>${channels.map((c,k)=>`<span>${c}: <b>${f(values[k],6)}</b></span>`).join('')}</div>`;
+  const boundary=()=>`<p class="mf-boundary">${b(['共用合成算例：31 波段、4 個原子；論文使用 500 個原子。四個原子僅為方便讀懂算式，不是完整過完備字典訓練。R 是人工平滑響應，每通道權重和設為 1；不是 CIE、Canon 實測曲線或作者程式重現。係數不被要求非負或加總為 1。顯示值有四捨五入，計算使用未四捨五入的值。','Shared synthetic example: 31 bands and 4 atoms; the paper uses 500 atoms. Four atoms make the arithmetic readable; this is not full overcomplete-dictionary training. R uses smooth synthetic responses with each channel summing to one, not measured CIE/Canon curves or reproduced author code. Coefficients are not constrained to be nonnegative or sum to one. Display values are rounded; calculations use unrounded values.'])}</p>`;
+  function graph(h,marker){
+    const lo=Math.min(0,...h),hi=Math.max(1,...h),x=j=>40+j*590/30,y=v=>180-(v-lo)/(hi-lo)*150;
+    return `<svg viewBox="0 0 650 215" role="img" aria-label="${esc(t(['完整 31 波段光譜；橫軸波長 nm，縱軸相對訊號','Full 31-Band Spectrum: Wavelength in nm versus Relative Signal']))}"><path d="M40 25V180H630" stroke="#889eaa" fill="none"/><polyline points="${h.map((v,j)=>`${x(j)},${y(v)}`).join(' ')}" fill="none" stroke="#008896" stroke-width="3"/><path d="M${x(marker)} 25V180" stroke="#c67927" stroke-dasharray="4 5"/><circle cx="${x(marker)}" cy="${y(h[marker])}" r="6" fill="#c67927"/><text x="40" y="205">400 nm</text><text x="578" y="205">700 nm</text><text x="5" y="32">${hi.toFixed(1)}</text><text x="5" y="180">${lo.toFixed(1)}</text></svg>`;
+  }
+  function projectView(){
+    const i=state.atom,j=state.band,k=state.channel,h=atoms[i],weights=R[k],products=weights.map((v,j)=>v*h[j]);
+    roots.project.querySelectorAll('[data-mf-atom]').forEach(el=>el.setAttribute('aria-pressed',String(+el.dataset.mfAtom===i)));
+    roots.project.querySelector('[data-mf-value="band"]').textContent=`${waves[j]} nm`;
+    roots.project.querySelector('.mf-result').innerHTML=`<p class="mf-fixed">${b(['固定：Dₕ 與 R。操作只選擇正在查看的原子、通道和波段，不改字典或係數。','Fixed: Dₕ and R. Controls inspect an atom, channel, and band; they do not modify the dictionary or any coefficients.'])}</p><div class="mf-projection-pair"><article><h4>Dₕ → h${i+1}</h4><p>${b(['第 i 欄是一條完整 31 波段原子','Column i Is One Complete 31-Band Atom'])}</p>${graph(h,j)}<p>h${i+1},${j+1} = ${f(h[j],6)} · ${waves[j]} nm</p></article><article><h4>D_RGB → c${i+1}</h4><p>${b(['同一編號的三通道原子','Three-Channel Atom with the Same Index'])}</p>${vectorRow(`c${i+1}`,partners[i])}${formula(`c${i+1} = R h${i+1}`,['式 (3) 是式 (2) 中第 i 欄的計算','Eq. (3) Computes Column i of Eq. (2)'])}<p>${b([`選原子 ${i+1}，左右就一起查看第 ${i+1} 欄；配對不會打亂。`,`Selecting atom ${i+1} inspects column ${i+1} on both sides; the pairing is preserved.`])}</p></article></div><section class="mf-calculation"><h4>${b([`拆開 ${channels[k]} 通道的第 ${j+1} 項：${waves[j]} nm`,`Expand Term ${j+1} of Channel ${channels[k]}: ${waves[j]} nm`])}</h4><div class="mf-product"><span><strong>${f(h[j],6)}</strong>${b(['此原子在此波段的訊號','This Atom’s Signal in This Band'])}</span><b>×</b><span><strong>${f(weights[j],6)}</strong>${b([`${channels[k]} 通道對此波段的權重`,`${channels[k]} Weight for This Band`])}</span><b>=</b><span><strong>${f(products[j],6)}</strong>${b(['這一項的貢獻','This Term’s Contribution'])}</span></div>${formula(`c${i+1},${channels[k]} = Σⱼ R${channels[k]},j h${i+1},j = ${f(partners[i][k],6)}`,['程式加總全部 31 項；讀取點只標示其中一項','All 31 Terms Are Summed; the Marker Inspects Just One'])}<details><summary>${b(['查看本原子的全部 31 項計算','Inspect All 31 Terms for This Atom'])}</summary>${table([['波段 j','Band j'],['hᵢ,ⱼ','hᵢ,ⱼ'],['Rₖ,ⱼ','Rₖ,ⱼ'],['乘積','Product']],waves.map((w,j)=>[`${j+1} · ${w} nm`,f(h[j],6),f(weights[j],6),f(products[j],6)]))}</details></section>${boundary()}`;
+  }
+  function recoveryViews(){
+    const c=queries[state.query],result=state.solved?fitRgb(c,state.budget):null;
+    roots.fit.querySelector('.mf-result').innerHTML=`<p class="mf-fixed">${b(['固定：同一本 D_RGB 與本次輸入 c_q。求解器只讀取這三個輸入數值，不讀未知光譜。','Fixed: the same D_RGB and query c_q. The solver reads only these three input values, not the unknown spectrum.'])}</p>${vectorRow('c_q',c)}${table([['候選原子 i','Candidate Atom i'],['D_RGB 的第 i 欄','Column i of D_RGB'],['求得的 wᵢ','Fitted wᵢ']],partners.map((a,i)=>[String(i+1),vec(a),result?f(result.w[i],6):'—']))}${result?`${formula(`D_RGB w = ${vec(result.estimate,6)}`,['式 (4)：用求得的係數重算 RGB','Eq. (4): Recompute RGB from the Fitted Coefficients'])}<p class="mf-status" role="status">${b([`本次使用 ${result.selected.length} 個原子；RGB 殘差長度 ${result.error.toExponential(3)}。${result.error<1e-9?'此算例已達數值容許差內的擬合。':'目前是近似擬合，可提高原子上限再求解。'}`,`Uses ${result.selected.length} ${result.selected.length===1?'atom':'atoms'}; RGB residual norm ${result.error.toExponential(3)}. ${result.error<1e-9?'The fit meets numerical tolerance in this example.':'This is an approximate fit; increase the atom limit and solve again.'}`])}</p><p>${b(['下方式 (5)–(6) 會直接沿用這一組 w，不提供另一個權重滑桿。','The playground below Eqs. (5)–(6) reuses this w directly; it does not introduce another weight slider.'])}</p><a href="#paper-transfer-playground">${b(['沿用本次 w，查看式 (5)–(6) →','Reuse This w in Eqs. (5)–(6) →'])}</a>`:`<p class="mf-status" role="status">${b(['尚未求解，所以不能先指定一組 w 假裝是反推答案。按「求解式 (4)」，才計算原子編號、係數與 RGB 殘差。','No fit yet: an arbitrary w is not presented as an inferred answer. Select “Solve Eq. (4)” to compute atom indices, coefficients, and RGB residual.'])}</p>`}<p class="mf-boundary">${b(['這裡實際用 OMP 選擇原子並共同重算最小平方差係數；不是手動混色。OMP 的逐步原理放在第 5 節的獨立詳解，本區只檢查式 (4) 的輸入、未知量與結果。','OMP actually selects atoms and jointly refits least-squares coefficients here; this is not manual color mixing. The algorithm’s step-by-step explanation remains in Section 5; this panel focuses on Eq. (4)’s input, unknowns, and result.'])} <a href="#paper-omp-walkthrough">OMP →</a></p>`;
+    if(result?.w.some(v=>v<0))roots.fit.querySelector('.mf-result').insertAdjacentHTML('beforeend',`<p class="mf-warning">${b(['本次出現負係數，表示減去一部分原子向量；不是負的光，也不是材質百分比。一般稀疏向量組合不自動具有非負、比例和為 1 等物理限制。','Negative coefficients subtract parts of atom vectors; they are neither negative light nor material percentages. General sparse vector combinations do not automatically impose nonnegativity or sum-to-one physical constraints.'])}</p>`);
+    roots.transfer.querySelector('[data-mf-field="outputBand"]').disabled=!result;
+    roots.transfer.querySelector('[data-mf-value="outputBand"]').textContent=`${waves[state.outputBand]} nm`;
+    if(!result){roots.transfer.querySelector('.mf-result').innerHTML=`<p class="mf-status">${b(['式 (5) 要用剛才式 (4) 求得的 w，目前還沒有求解結果。先回上一個 Playground 求解，不在這裡另外猜權重。','Eq. (5) requires w from Eq. (4), which has not been solved yet. Fit the preceding playground first; do not guess separate weights here.'])}</p><a href="#paper-fit-playground">${b(['回到式 (4) 求解 →','Fit Eq. (4) First →'])}</a>`;return;}
+    const v=transfer(result.w),j=state.outputBand,active=result.selected;
+    roots.transfer.querySelector('.mf-result').innerHTML=`<p class="mf-fixed">${b(['固定：Dₕ、R，以及式 (4) 求得的同一組 w。滑桿只讀取輸出的某個波段，不重算或改動 w。','Fixed: Dₕ, R, and the same w fitted in Eq. (4). The slider inspects one output band; it neither refits nor changes w.'])}</p>${formula(`w = ${vec(result.w,6)}`,['來源：上方的式 (4) 求解結果','Source: the Eq. (4) Fit Above'])}<div class="mf-transfer-columns"><section><h4>${b(['式 (5)：一個輸出波段怎麼算？','Eq. (5): How Is One Output Band Computed?'])}</h4><p>${waves[j]} nm · j = ${j+1}</p>${table([['原子 i','Atom i'],['同一個 wᵢ','Same wᵢ'],['Dₕ 的波段值','Band Value in Dₕ'],['相乘的貢獻','Product Contribution']],active.map(i=>[i+1,f(result.w[i],6),f(atoms[i][j],6),f(v.products[i][j],6)]))}${formula(`ĥq,${j+1} = ${active.map(i=>f(v.products[i][j],6)).join(' + ')} = ${f(v.h[j],6)}`,['只加總已用原子的貢獻；未用原子的係數為 0','Sum Used-Atom Contributions; Unused Coefficients Are Zero'])}${graph(v.h,j)}<p>${b(['每個原子都有 31 波段；同一個 w 用在每個波段，所以最後仍有 31 個輸出值。','Each atom has 31 bands. The same w is used at every band, yielding all 31 output values.'])}</p></section><section><h4>${b(['式 (6)：把這條估計光譜再投影一次','Eq. (6): Project This Estimated Spectrum Back'])}</h4>${vectorRow('c_q',c)}${vectorRow('Rĥ_q',v.back)}${formula('Rĥ_q = R(Dₕw) = (RDₕ)w = D_RGBw',['用同一個 R、成對字典及同一個 w，兩條路徑一致','The Same R, Paired Dictionaries, and w Make Both Paths Agree'])}<p>‖c_q − Rĥ_q‖₂ = ${norm(c.map((x,k)=>x-v.back[k])).toExponential(3)}</p><p>‖Rĥ_q − D_RGBw‖₂ = ${v.identityError.toExponential(3)}</p><p class="mf-warning">${b(['第一個差值是式 (4) 的 RGB 擬合誤差；第二個接近 0 是線性一致性檢查。即使兩者都很小，仍不能證明 ĥ_q 是真實光譜；光譜準確度需要獨立真值評估。','The first difference is Eq. (4)’s RGB fit error; the near-zero second difference checks linear consistency. Even if both are small, ĥ_q is not proven to be the true spectrum. Spectral accuracy needs independent ground truth.'])}</p></section></div>${boundary()}`;
+  }
+  function render(){projectView();roots.project.querySelector('details').open=state.termsOpen;recoveryViews();}
+  function shell(id,eqs,title,help){const el=document.createElement('section');el.id=id;el.className='paper-playground mf-playground';el.dataset.i18nSkip='';el.setAttribute('aria-labelledby',`${id}-title`);el.innerHTML=`<header><p class="eyebrow">Playground · ${esc(eqs)}</p><h3 id="${id}-title">${b(title)}</h3><p>${b(help)}</p></header><div class="mf-controls"></div><div class="mf-result"></div>`;return el;}
+  function initialize(){
+    const project=shell('paper-paired-playground','Eqs. (1)–(3)',['逐欄驗算：hᵢ 如何得到 cᵢ？','Verify One Column: How Does hᵢ Produce cᵢ?'],['對照剛才的字典、投影式與加權總和：選一欄，查看完整光譜、配對 RGB，以及其中一項乘法。這裡不求重建係數。','Apply the dictionary, projection equations, and weighted sum above: inspect one column, its full spectrum, RGB partner, and one product. No recovery coefficients are fitted here.']);
+    document.getElementById('paper-camera-sum').after(project);
+    const alias=document.createElement('span');alias.id='paper-method-playground';project.prepend(alias);
+    project.querySelector('.mf-controls').innerHTML=`<div class="mf-atom-choices">${atoms.map((_,i)=>`<button type="button" data-mf-atom="${i}" aria-pressed="${i===0}">i = ${i+1}<small>h${i+1} ↔ c${i+1}</small></button>`).join('')}</div><label>${b(['查看通道 k','Inspect Channel k'])}<select data-mf-field="channel">${channels.map((c,i)=>`<option value="${i}">${c}</option>`).join('')}</select></label><label>${b(['查看波段 j（不改字典）','Inspect Band j (Dictionary Unchanged)'])}<output data-mf-value="band"></output><input type="range" min="0" max="30" step="1" value="15" data-mf-field="band"></label>`;
+    const fit=shell('paper-fit-playground','Eq. (4)',['固定 RGB，求出稀疏係數 w','Fix RGB and Solve for Sparse Coefficients w'],['這裡只做式 (4)：輸入是 c_q，未知的是 w。使用與上方完全相同的成對字典。改變輸入或原子上限會清除舊解，需重新求解。','This panel performs Eq. (4) only: c_q is the input and w is unknown. It uses exactly the paired dictionary above. Changing query or atom limit clears the old fit and requires solving again.']);
+    document.getElementById('paper-eq-4').after(fit);
+    fit.querySelector('.mf-controls').innerHTML=`<label>${b(['選擇固定 RGB 輸入','Choose a Fixed RGB Input'])}<select data-mf-field="query"><option value="0">A</option><option value="1">B</option></select></label><label>${b(['最多使用的原子數','Maximum Used Atoms'])}<select data-mf-field="budget"><option>1</option><option>2</option><option selected>3</option></select></label><button type="button" data-mf-action="solve">${b(['求解式 (4)','Solve Eq. (4)'])}</button>`;
+    const output=shell('paper-transfer-playground','Eqs. (5)–(6)',['沿用 w：逐波段重建，再回投影','Reuse w: Reconstruct Each Band, Then Reproject'],['對應緊接上方的式 (5)、(6)：不再求一組權重，而是把上一個 Playground 算出的同一組係數套回完整光譜。','Apply Eqs. (5) and (6) immediately above. Do not fit another set of weights; transfer the exact coefficients computed in the preceding playground to full spectral atoms.']);
+    document.getElementById('paper-eq-6').after(output);
+    output.querySelector('.mf-controls').innerHTML=`<label>${b(['讀取估計光譜的哪個波段？','Inspect Which Estimated Band?'])}<output data-mf-value="outputBand"></output><input type="range" min="0" max="30" step="1" value="15" data-mf-field="outputBand"></label>`;
+    roots={project,fit,transfer:output};
+    project.querySelector('.mf-atom-choices').insertAdjacentHTML('beforebegin',`<p class="mf-demo-size">${b(['本算例保留 31 波段，將候選縮成 4 欄方便驗算：Dₕ 是 31 × 4，D_RGB 是 3 × 4。論文實驗則各有 500 欄。','This example keeps 31 bands but uses four readable columns: Dₕ is 31 × 4 and D_RGB is 3 × 4. The paper’s experimental dictionaries each have 500 columns.'])}</p>`);
+    for(const root of Object.values(roots))for(const el of root.querySelectorAll('[data-mf-field]')){el.id=`${root.id}-${el.dataset.mfField}`;el.closest('label').htmlFor=el.id;}
+    const page=document.getElementById('paper-method');
+    page.addEventListener('toggle',event=>{if(event.target.matches('.mf-calculation details')&&state.termsOpen!==event.target.open){state.termsOpen=event.target.open;window.ReportProjection?.notify();}},true);
+    page.addEventListener('click',event=>{const atom=event.target.closest('[data-mf-atom]');if(atom){state.atom=+atom.dataset.mfAtom;render();}if(event.target.closest('[data-mf-action="solve"]')){state.solved=true;render();}window.ReportProjection?.notify();});
+    const update=event=>{const el=event.target,key=el.dataset.mfField;if(!key)return;state[key]=+el.value;if(key==='query'||key==='budget')state.solved=false;render();window.ReportProjection?.notify();};
+    page.addEventListener('input',update);page.addEventListener('change',event=>{if(event.target.tagName==='SELECT')update(event);});
+    document.addEventListener('reportlanguagechange',render);
+    window.ReportProjection?.register('method-formula-chain',{get:()=>({...state}),set:s=>{for(const [key,max] of Object.entries({atom:3,band:30,channel:2,query:1,outputBand:30}))state[key]=Math.max(0,Math.min(max,Math.round(Number(s[key])||0)));state.budget=Math.max(1,Math.min(3,Math.round(Number(s.budget)||3)));state.solved=!!s.solved;state.termsOpen=!!s.termsOpen;for(const el of page.querySelectorAll('[data-mf-field]'))el.value=state[el.dataset.mfField];render();}});
+    const jump=document.createElement('a');jump.className='paper-playground-jump';jump.href='#paper-paired-playground';jump.innerHTML=b(['前往式 (1)–(3) 的 Playground ↓','Open the Eqs. (1)–(3) Playground ↓']);page.querySelector('.paper-heading').append(jump);
+    render();
+  }
+  window.ReportMethodFormulas={math:{waves,atoms,R,partners,queries,project,combine,fitRgb,transfer},snapshot:()=>({...state}),initialize};
+  initialize();
+})();
