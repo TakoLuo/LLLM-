@@ -81,7 +81,7 @@
         detail=`<p class="fr-number">score${v.pending+1} = |${a.map((x,i)=>`(${fmt(x,4)} × ${fmt(oldr[i],4)})`).join(' + ')}| ÷ ${fmt(length,4)} ≈ ${fmt(Math.abs(inner)/length)}</p><p class="fr-number">j = ${v.pending+1}</p>`;
       }else detail=`<p class="fr-number">L_RGB = ${r.map(x=>`(${fmt(x)})²`).join(' + ')} ≈ <strong>${fmt(sse(r))}</strong></p><p class="fr-number">‖r‖₂ = √L_RGB ≈ ${fmt(Math.sqrt(sse(r)))}</p>`;
     }
-    return `<aside class="fr-live" data-i18n-skip><h4>${b(['把上方公式代入目前數值','Substitute the Current Values into the Equations'])}</h4>${p(text)}${detail}<small>${b(['顯示數值經四捨五入；計算使用完整精度。合成教學算例，不是論文實測。','Displayed values are rounded; calculations use full precision. Synthetic teaching example, not measured paper results.'])}</small></aside>`;
+    return `<aside class="fr-live" data-i18n-skip><h4>${b(['把上方公式代入目前數值','Substitute the Current Values into the Equations'])}</h4>${p(text)}${detail}<small>${b(['顯示數值經四捨五入；計算使用完整精度。合成範例，不是論文實測。','Displayed values are rounded; calculations use full precision. Synthetic example, not measured paper results.'])}</small></aside>`;
   }
   const equationRoles={
     'paper-eq-1':[[input,['準備階段學好的完整光譜原子 h₁…hₙ。','Complete spectral atoms h₁…hₙ learned during preparation.']],[output,['組成字典 Dₕ；這是定義，不是在此式重新求解原子。','Dictionary Dₕ; this is a definition, not a new atom-learning optimization.']]],

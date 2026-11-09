@@ -115,7 +115,7 @@
   const steps=m=>m.kind==='residual'?residualSteps:pipeline;
   function stop(m){clearInterval(m.timer);m.timer=null;}
   const button=(action,label,disabled=false)=>`<button type="button" data-guide-action="${action}" ${disabled?'disabled':''}>${b(label)}</button>`;
-  const notice=()=>`<p class="guide-boundary">${b(['合成教學算例；不是論文量測結果，也不是作者程式重現。','Synthetic teaching example; not measured paper results or a reproduction of the authors’ code.'])}</p>`;
+  const notice=()=>`<p class="guide-boundary">${b(['合成範例；不是論文量測結果，也不是作者程式重現。','Synthetic example; not measured paper results or a reproduction of the authors’ code.'])}</p>`;
   function residualGraphic(step){
     const rows=[['y',[.8,.6],'#176b7a'],['b',[.2,.3],'#637482']];
     if(step>=1)rows.push(['e₁ = y − b',[.6,.3],'#c57929']);

@@ -6,31 +6,31 @@
   <meta name="description" content="A bilingual interactive guide to Sparse Recovery of Hyperspectral Signal from Natural RGB Images, including its concepts, equations, experiments, and limitations.">
   <title>Sparse Recovery of Hyperspectral Signal from Natural RGB Images</title>
   <link rel="stylesheet" href="styles.css?v=25">
-  <link rel="stylesheet" href="concepts.css?v=49">
+  <link rel="stylesheet" href="concepts.css?v=59">
   <link rel="stylesheet" href="foundation-labs.css?v=29">
   <link rel="stylesheet" href="literature.css?v=22">
   <link rel="stylesheet" href="projection.css?v=26">
   <link rel="stylesheet" href="speaker-tools.css?v=28">
   <link rel="stylesheet" href="paper-mainline.css?v=35">
-  <link rel="stylesheet" href="sidebar-playgrounds.css?v=36">
+  <link rel="stylesheet" href="sidebar-playgrounds.css?v=53">
   <script src="projection-pointer.js?v=28" defer></script>
   <script src="projection.js?v=28" defer></script>
   <script src="speaker-tools.js?v=28" defer></script>
-  <script src="i18n.js?v=26" defer></script>
-  <script src="concept-data.js?v=48" defer></script>
-  <script src="foundation-labs.js?v=36" defer></script>
-  <script src="literature.js?v=36" defer></script>
-  <script src="concepts.js?v=50" defer></script>
+  <script src="i18n.js?v=55" defer></script>
+  <script src="concept-data.js?v=60" defer></script>
+  <script src="foundation-labs.js?v=55" defer></script>
+  <script src="literature.js?v=55" defer></script>
+  <script src="concepts.js?v=59" defer></script>
   <link rel="stylesheet" href="paper-guide.css?v=41">
-  <script src="paper-mainline.js?v=45" defer></script>
+  <script src="paper-mainline.js?v=55" defer></script>
   <script src="paper-playgrounds.js?v=44" defer></script>
   <link rel="stylesheet" href="algorithm-focus.css?v=46">
   <link rel="stylesheet" href="formula-reading.css?v=45">
-  <script src="formula-reading.js?v=45" defer></script>
-  <script src="algorithm-focus.js?v=50" defer></script>
-  <script src="paper-guide.js?v=44" defer></script>
+  <script src="formula-reading.js?v=55" defer></script>
+  <script src="algorithm-focus.js?v=59" defer></script>
+  <script src="paper-guide.js?v=55" defer></script>
   <link rel="stylesheet" href="paper-structure.css?v=42">
-  <script src="paper-structure.js?v=44" defer></script>
+  <script src="paper-structure.js?v=55" defer></script>
   <link rel="stylesheet" href="method-formulas.css?v=44">
   <script src="method-formulas.js?v=50" defer></script>
   <link rel="stylesheet" href="research-purpose.css?v=47">
@@ -38,9 +38,18 @@
   <link rel="stylesheet" href="playground-connections.css?v=47">
   <script src="playground-connections.js?v=50" defer></script>
   <link rel="stylesheet" href="equation-stories.css?v=50">
-  <script src="equation-contracts.js?v=50" defer></script>
-  <script src="equation-stories.js?v=50" defer></script>
-  <script src="app.js?v=36" defer></script>
+  <link rel="stylesheet" href="formula-explanations.css?v=64">
+  <link rel="stylesheet" href="formula-playgrounds.css?v=56">
+  <script src="formula-explanations.js?v=64" defer></script>
+  <script src="equation-contracts.js?v=55" defer></script>
+  <script src="equation-stories.js?v=59" defer></script>
+  <script src="formula-playgrounds.js?v=60" defer></script>
+  <link rel="stylesheet" href="recovery-focus.css?v=62">
+  <script src="recovery-focus.js?v=64" defer></script>
+  <link rel="stylesheet" href="connected-recovery.css?v=64">
+  <script src="connected-recovery.js?v=64" defer></script>
+  <script src="connected-supplements.js?v=64" defer></script>
+  <script src="app.js?v=55" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">跳到目前頁面內容</a>
@@ -200,7 +209,7 @@
         <article class="knowledge-detail">
           <p class="knowledge-kicker">再懂縱軸</p>
           <h3>訊號強度：該小段波長送進感測器多少訊號</h3>
-          <p>縱軸可以代表輻射功率、感測器讀值或正規化後的相對強度，必須看實驗定義。本頁用 0–1 的相對值教學；只有在物理量、單位與正規化方式相同時，0.8 才能說比 0.4 強，而且不代表「80% 的光都是這個波長」。</p>
+          <p>縱軸可以代表輻射功率、感測器讀值或正規化後的相對強度，必須看實驗定義。本頁用 0–1 的相對值呈現範例；只有在物理量、單位與正規化方式相同時，0.8 才能說比 0.4 強，而且不代表「80% 的光都是這個波長」。</p>
         </article>
         <article class="knowledge-detail">
           <p class="knowledge-kicker">最後看整條曲線</p>
@@ -250,7 +259,7 @@
             <title id="spectrumChartTitle">材料的簡化光譜曲線</title>
             <desc id="spectrumChartDesc">橫軸是波長，縱軸是相對強度。滑動波長可查看曲線上的位置。</desc>
           </svg>
-          <figcaption>光譜曲線的橫軸是波長，縱軸是相對強度。示意曲線用於教學，不是論文量測資料。</figcaption>
+          <figcaption>光譜曲線的橫軸是波長，縱軸是相對強度。示意曲線用於說明，不是論文量測資料。</figcaption>
         </figure>
       </div>
       <aside class="classroom">綠葉並非只反射綠光。切換到紅光區域，可以觀察到它仍具有非零反應。</aside>
@@ -280,7 +289,7 @@
             <title id="illuminationChartTitle">照明、反射率與到達相機的光譜</title>
             <desc id="illuminationChartDesc">切換均勻、偏暖與偏冷光源，比較同一片葉子的反射率與出射訊號。</desc>
           </svg>
-          <figcaption>三條曲線皆為教學示意。真實訊號還受陰影、表面方向、鏡頭透射率與曝光影響。</figcaption>
+          <figcaption>三條曲線皆為示意呈現。真實訊號還受陰影、表面方向、鏡頭透射率與曝光影響。</figcaption>
         </figure>
       </section>
 
@@ -336,7 +345,7 @@
           </details>
           <details name="terms-03">
             <summary><strong>正規化</strong><span>用一致尺度方便比較</span></summary>
-            <div><p>正規化會按規則縮放數值。本頁教學器分別除以各通道的權重總和，讓結果容易落在 0–1；這相當於對三個通道套用不同增益，會改變通道間的數值比例，也不會增加任何光譜資訊。</p></div>
+            <div><p>正規化會按規則縮放數值。本頁互動模型分別除以各通道的權重總和，讓結果容易落在 0–1；這相當於對三個通道套用不同增益，會改變通道間的數值比例，也不會增加任何光譜資訊。</p></div>
           </details>
           <details name="terms-03">
             <summary><strong>Gamma 顯示編碼</strong><span>把線性值轉成較適合儲存與顯示的數值</span></summary>
@@ -350,9 +359,9 @@
       </div>
 
       <div class="worked-example" aria-labelledby="weightedExampleTitle">
-        <div><p class="knowledge-kicker">四個波段的小算例</p><h3 id="weightedExampleTitle">「加權總和」就是先逐項相乘，再全部相加</h3><p>假設某個 G 通道只看四個教學波段：光譜訊號值是 (0.2, 0.8, 0.5, 0.1)，敏感度權重是 (0.1, 0.7, 0.4, 0.0)。</p></div>
+        <div><p class="knowledge-kicker">四個波段的小算例</p><h3 id="weightedExampleTitle">「加權總和」就是先逐項相乘，再全部相加</h3><p>假設某個 G 通道只看四個示意波段：光譜訊號值是 (0.2, 0.8, 0.5, 0.1)，敏感度權重是 (0.1, 0.7, 0.4, 0.0)。</p></div>
         <p class="worked-equation" data-i18n-skip>G<sub>raw</sub> = 0.78　→　G<sub>normalized</sub> = 0.78 ÷ 1.20 = <strong>0.65</strong></p>
-        <p>0.78 是論文式子所示的加權總和；0.65 是本教學器再除以權重總和 1.20 的正規化結果。最後一個波段即使有訊號，只要 G 通道在那裡的權重為 0，就不會貢獻 G。真實模型把同樣動作擴展到 31 個波段，並對 R、G、B 各算一次。</p>
+        <p>0.78 是論文式子所示的加權總和；0.65 是本頁模型再除以權重總和 1.20 的正規化結果。最後一個波段即使有訊號，只要 G 通道在那裡的權重為 0，就不會貢獻 G。真實模型把同樣動作擴展到 31 個波段，並對 R、G、B 各算一次。</p>
       </div>
 
       <div class="lab two-column">
@@ -404,7 +413,7 @@
             <title id="rgbChartTitle">光譜與相機三通道反應</title>
             <desc id="rgbChartDesc">灰色虛線表示原始光譜，深色實線表示調整後光譜；三條不同線型曲線表示紅綠藍感測器反應，黃色區域標出目前修改範圍。</desc>
           </svg>
-          <figcaption>灰色虛線是原始光譜，深色實線是調整後光譜，黃色區域是被修改的範圍。RGB 仍是整段曲線的加權總和；曲線與數值均為教學示意。</figcaption>
+          <figcaption>灰色虛線是原始光譜，深色實線是調整後光譜，黃色區域是被修改的範圍。RGB 仍是整段曲線的加權總和；曲線與數值均為示意呈現。</figcaption>
         </figure>
       </div>
 
@@ -413,7 +422,7 @@
           <p class="eyebrow">逐步拆解相機計算</p>
           <h3 id="rgbCalculationTitle">相機如何把一條光譜算成 RGB？</h3>
           <p>這個計算器沿用上方的光譜與波長。先追蹤一個波段的貢獻，再把全部 31 個波段加總；切換 R、G、B，可以看到三條感光曲線使用不同權重。</p>
-          <p class="model-boundary">先分清兩個版本：論文寫的是 cₖ = Σⱼ Rₖ,ⱼhⱼ。本教學器為了把三個通道都顯示在 0–1，另外除以各通道的敏感度總和；這是網頁的正規化，不是論文多出的一個重建步驟。</p>
+          <p class="model-boundary">先分清兩個版本：論文寫的是 cₖ = Σⱼ Rₖ,ⱼhⱼ。本頁模型為了把三個通道都顯示在 0–1，另外除以各通道的敏感度總和；這是網頁的正規化，不是論文多出的一個重建步驟。</p>
         </header>
 
         <ol class="camera-pipeline" aria-label="從光譜到螢幕顏色的四個階段">
@@ -466,7 +475,7 @@
           <article>
             <span>② 除以敏感度總和</span>
             <strong id="rgbCalcWeightSum">0.000</strong>
-            <small>本教學器用來正規化</small>
+            <small>本頁模型用來正規化</small>
           </article>
           <span class="sum-operator" aria-hidden="true">=</span>
           <article class="sum-result">
@@ -478,7 +487,7 @@
 
         <div class="rgb-stage-comparison">
           <article class="paper-rgb-card">
-            <span>教學器：正規化線性 RGB</span>
+            <span>互動模型：正規化線性 RGB</span>
             <code id="rgbCalcLinearRgb" data-i18n-skip>c̃ ≈ (0.00, 0.00, 0.00)</code>
             <p>這三個值來自三次正規化加權平均，保留 c = Rh 的線性加權概念，但數值尺度不等同於論文未正規化的 c。</p>
           </article>
@@ -492,10 +501,10 @@
         </div>
 
         <details class="deep-dive rgb-formula-details">
-          <summary>展開正式公式與教學器的正規化方式</summary>
+          <summary>展開正式公式與互動模型的正規化方式</summary>
           <div class="rgb-formula-grid">
             <article><h4>論文的一個通道</h4><p><code data-i18n-skip>c<sub>k</sub> = Σ<sub>j=1</sub><sup>31</sup> R<sub>k,j</sub>h<sub>j</sub></code></p><p>hⱼ 是第 j 個波段強度，Rₖⱼ 是相機第 k 個通道在該波段的權重。三個通道合起來就是 c = Rh。</p></article>
-            <article><h4>本教學器的一個通道</h4><p><code data-i18n-skip>c̃<sub>k</sub> = (Σ h<sub>j</sub>s<sub>k,j</sub>) ÷ (Σ s<sub>k,j</sub>)</code></p><p>為了讓 R、G、B 都容易以 0–1 比較，本教學器把每條感光曲線的總權重正規化為 1。論文或真實相機的 R 不一定採用相同縮放。</p></article>
+            <article><h4>本頁模型的一個通道</h4><p><code data-i18n-skip>c̃<sub>k</sub> = (Σ h<sub>j</sub>s<sub>k,j</sub>) ÷ (Σ s<sub>k,j</sub>)</code></p><p>為了讓 R、G、B 都容易以 0–1 比較，本頁模型把每條感光曲線的總權重正規化為 1。論文或真實相機的 R 不一定採用相同縮放。</p></article>
           </div>
           <aside class="camera-reality-note">真實相機還多一層：許多相機的每個感光點只覆蓋一種色彩濾鏡，再以去馬賽克估算完整 RGB。這篇論文把複雜硬體與處理流程濃縮成已知的三通道反應矩陣 R；因此這個互動是在解釋論文的感測模型，不是完整重做某一台相機的 JPEG 演算法。</aside>
         </details>
@@ -674,7 +683,7 @@
           <div class="cube-signal-readout">
             <div><span id="cubeTargetName">葉子</span><strong id="cubeSignalValue">55%</strong></div>
             <meter id="cubeSignalMeter" min="0" max="1" value="0.55" aria-labelledby="cubeTargetName cubeSignalCaption">55%</meter>
-            <small id="cubeSignalCaption">相對訊號強度（教學模擬）</small>
+            <small id="cubeSignalCaption">相對訊號強度（合成模擬）</small>
           </div>
           <p id="cubeSummary" class="dynamic-summary" aria-live="polite">現在觀看 550 nm。物體沒有移動；葉子在這個波長的訊號較強，所以顯得較亮。</p>
         </div>
@@ -699,7 +708,7 @@
 
       <aside class="takeaway cube-equation-note">把符號翻成白話：I(x, y, λ) 表示「畫面位置 (x, y) 在波長 λ 的訊號強度」。拖曳時 λ 改變，但 (x, y) 不變；選定一個代表像素後讀完所有 λ，就得到該位置的光譜。</aside>
       <p class="pixel-clarification">這張簡化圖如何對應像素：為了讓形狀容易辨認，整個區塊使用同一種示意光譜；點選一個區塊，可理解為選取其中一個代表像素。真實高光譜影像中的每個像素，都有各自的一條光譜。</p>
-      <p class="simulation-note">此互動為教學模擬，不是論文實驗影像。實際亮度還會受光源、陰影、曝光與感測器靈敏度影響。</p>
+      <p class="simulation-note">此互動為合成模擬，不是論文實驗影像。實際亮度還會受光源、陰影、曝光與感測器靈敏度影響。</p>
 
       <section class="acquisition-section" aria-labelledby="acquisitionTitle">
         <div class="section-introduction"><p class="eyebrow">為何高光譜相機較慢、較貴</p><h3 id="acquisitionTitle">二維感測器要取得三維資料，通常必須多掃描一個方向</h3><p>一般感測器一次得到二維平面，但高光譜資料還多了波長 λ。硬體因此必須逐點、逐線或逐波段收集資料；場景若在掃描期間移動，不同切片就可能對不準。</p></div>
@@ -781,7 +790,7 @@
             <article><span>兩條光譜的距離</span><strong id="metamerSpectrumDistance">0.000</strong><small data-i18n-skip>‖h<sub>A</sub> − h<sub>B</sub>‖₂</small></article>
             <article><span>兩組 RGB 的殘差</span><strong id="metamerRgbResidual">0.000000</strong><small data-i18n-skip>‖Rh<sub>A</sub> − Rh<sub>B</sub>‖₂</small></article>
           </div>
-          <p class="dynamic-summary" id="metamerSummary" aria-live="polite">兩條光譜已不同，但改變方向位於此教學相機的零空間，因此三個加權總和維持相同。</p>
+          <p class="dynamic-summary" id="metamerSummary" aria-live="polite">兩條光譜已不同，但改變方向位於此簡化相機模型的零空間，因此三個加權總和維持相同。</p>
           <button class="reset-button light" id="resetMetamer" type="button">重設差異</button>
         </div>
         <figure class="figure-panel">
@@ -858,7 +867,7 @@
           <span><var>B</var>：少數線性或局部變化方向</span>
           <span><var>a</var>：描述目前光譜的係數</span>
           <p data-i18n-skip>c ≈ R(μ + B a)</p>
-          <small>B 是本頁用來解釋 PCA／局部子空間的教學基底，不是後面稀疏方法使用的字典 Dₕ；彎曲流形通常需要分區或非線性模型近似。</small>
+          <small>B 是本頁用來解釋 PCA／局部子空間的示意基底，不是後面稀疏方法使用的字典 Dₕ；彎曲流形通常需要分區或非線性模型近似。</small>
         </div>
         <p class="precision-note">更精確的條件：若只需 k 個係數，RGB 最多提供 3 個獨立限制。即使 k ≤ 3，還要確認 RB 的方向沒有被相機壓到一起；若 k &gt; 3，通常仍需稀疏性或其他先驗。低維會減少困難，但不自動保證唯一。</p>
       </section>
@@ -1299,7 +1308,7 @@
         <li><a href="https://icvl.cs.bgu.ac.il/pages/researches/hyperspectral-imaging.html" target="_blank" rel="noreferrer">作者研究頁面與 ICVL 資料集</a></li>
         <li><a href="https://github.com/icvl/shred" target="_blank" rel="noreferrer">作者公開 MATLAB 程式庫 shred</a></li>
       </ul>
-      <p>網站中的簡化曲線、玩具相機與互動數值皆清楚標為教學示意；論文實驗數字則依原文呈現。</p>
+      <p>網站中的簡化曲線、簡化相機模型與互動數值皆清楚標為示意呈現；論文實驗數字則依原文呈現。</p>
     </section>
   </main>
 

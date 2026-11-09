@@ -36,7 +36,7 @@
       frame(['逐項相減','Subtract Entrywise'],'δℓ = {ĥℓ − hℓ}',`δ = ${vec(diff)}`,['估計與真值必須在相同尺度上；這裡比較的是光譜值，不是 RGB。','Estimate and truth must share a scale. These are spectral values, not RGB.']),
       frame(['每個差值平方','Square Each Difference'],'qℓ = {δℓ²}',`q = (${v.squares.map(x=>f(x)).join(', ')})`,['正負差值平方後都非負，才不會在加總時互相抵銷。','Squaring makes both signs nonnegative, preventing cancellation in the sum.']),
       frame(['加總後除以四項','Sum and Divide by Four'],'MSE = {Σℓ qℓ / M}',`Σ qℓ = ${f(total)}\nM = 4\nMSE = ${f(v.mean)}`,['這裡才是平均平方差；不是先把差值平均再平方。','This is mean squared error, rather than the square of the mean difference.']),
-      frame(['最後開根號','Take the Square Root'],'RMSE = {√MSE}',`RMSE = √${f(v.mean)} = ${f(v.rmse)}`,['開根號回到原數值尺度。這是四項教學算例，不是重新計算論文 Table 1。','The square root returns to the original scale. This four-entry example does not recompute paper Table 1.'])
+      frame(['最後開根號','Take the Square Root'],'RMSE = {√MSE}',`RMSE = √${f(v.mean)} = ${f(v.rmse)}`,['開根號回到原數值尺度。這是四項範例，不是重新計算論文 Table 1。','The square root returns to the original scale. This four-entry example does not recompute paper Table 1.'])
     ]};
   }
   const configs=[
@@ -67,6 +67,7 @@
   },80);draw(m);}
   function initialize(){
     for(const cfg of configs){const host=document.getElementById(cfg.host);if(!host)throw new Error('Missing animation host '+cfg.host);const root=document.createElement('details');root.className='eq-film';root.id=`equation-film-${cfg.id}`;root.dataset.i18nSkip='';root.innerHTML=`<summary>${b(cfg.title)}</summary><div class="eq-film-toolbar"><button type="button" data-eq-action="play"></button><button type="button" data-eq-action="prev">${b(['上一步','Previous'])}</button><button type="button" data-eq-action="next">${b(['下一步','Next'])}</button><button type="button" data-eq-action="replay">${b(['從頭重播','Replay from Start'])}</button><output class="eq-film-clock"></output></div><progress max="1" value="0" aria-label="Animation progress"></progress><div class="eq-film-steps"></div><div class="eq-film-scene" aria-live="polite"></div><a href="${cfg.target}">${b(['對照本段完整公式 ↑','Open the Full Equation ↑'])}</a><p class="eq-film-note">${b(['與本頁相同數值引擎的合成算例；黃色標示本步正在處理的公式項目。可暫停或逐步查看，播放不會改寫原始量測。','Synthetic example from the same numerical engines as this page. Yellow highlights the current equation term. Pause or step through it; playback does not modify measured data.'])}</p>`;
+      if(['ksvd','omp'].includes(cfg.id))root.querySelector('.eq-film-note').insertAdjacentHTML('afterbegin',`<strong>${b(['收起這段動畫，即可回到原本的手動逐步操作；動畫展開時暫時隱藏手動區，避免同時播放兩套流程。','Collapse this animation to return to the manual walkthrough. The manual area is temporarily hidden while the animation is open.'])}</strong><br>`);
       const anchor=host.querySelector(':scope > .pa-catalog')||host.querySelector(':scope > header');anchor.after(root);
       const m={cfg,root,scene:root.querySelector('.eq-film-scene'),elapsed:0,frame:0,payload:cfg.build(),timer:null,tick:0};models.set(cfg.id,m);
       root.querySelector('.eq-film-steps').innerHTML=m.payload.frames.map((v,i)=>`<button type="button" data-eq-frame="${i}" aria-label="${e(v.title[1])}">${i+1}</button>`).join('');

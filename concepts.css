@@ -1,4 +1,21 @@
 /* Dedicated concept pages: text expands naturally in all three language modes. */
+.offline-explanation { padding:28px; border:1px solid #b9ced6; border-radius:18px; background:#f1f7f8; }
+.offline-explanation h3,.offline-explanation h4,.offline-explanation h5 { line-height:1.65; margin:0 0 12px; }
+.offline-explanation h3 { font-size:1.2em; }.offline-explanation h4 { font-size:1.05em; }.offline-explanation h5 { font-size:.94em; }
+.offline-explanation p { line-height:1.85; font-size:.86em; margin:10px 0; }
+.offline-phases { display:grid; grid-template-columns:minmax(0,1fr); gap:22px; margin:24px 0; }
+.offline-phases > section { min-width:0; padding:22px; background:white; border:1px solid #b9ced6; border-top:4px solid #008896; border-radius:12px; }
+.offline-phases > section+section { border-top-color:#b77425; }
+.offline-phases ol { list-style:none; padding:0; margin:24px 0 0; }.offline-phases li { display:grid; grid-template-columns:30px minmax(0,1fr); gap:12px; margin:0; padding:24px 0; border-top:1px solid #d3e0e6; }
+.offline-step-number { display:grid; place-items:center; width:28px; height:28px; background:#16384f; border-radius:50%; color:white; font-size:.8em; font-weight:750; }
+.offline-expression { padding:16px; font-size:1.12em; line-height:1.9; border-radius:8px; background:#eaf2f5; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; color:#16384f; }
+.offline-explanation aside { padding:20px; border:1px solid #b9ced6; border-radius:10px; background:white; }.offline-validation { border-left:4px solid #008896; padding:15px; }
+.offline-symbols { margin:18px 0; padding:0; }.offline-symbols > div { padding:12px 0; border-bottom:1px solid #e0e9ed; }
+.offline-symbols dt { font-weight:750; line-height:1.7; color:#16384f; }.offline-symbols dd { margin:6px 0 0; font-size:.86em; line-height:1.85; }
+.offline-explain-block { margin:18px 0 0; }.offline-explain-block h6 { margin:0; font-size:.86em; line-height:1.8; color:#12606c; }
+.offline-explanation .offline-reading { font-weight:650; }.offline-explanation .offline-explain-block:last-child { padding:16px; border-left:3px solid #b77425; background:#fff8ed; border-radius:5px; }
+.offline-phases li > div { min-width:0; }.offline-explanation p,.offline-symbols dd { overflow-wrap:anywhere; }
+@media(max-width:600px) { .offline-explanation { padding:18px; }.offline-phases > section { padding:16px; } }
 .rank-lesson .cx-workbench { grid-template-columns:minmax(220px,.8fr) minmax(0,1.7fr); align-items:start; }
 .rank-lesson .cx-controls { display:flex; flex-direction:column; gap:18px; position:sticky; top:18px; }
 .rank-clue-choices { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:20px 28px 0; }
@@ -372,3 +389,8 @@ html[data-language="bilingual"] .signature-live-summary .i18n-zh { color:#c9dbe7
   .signature-lab .signature-focus-panel { padding:12px; min-height:0; }
   .signature-lab .signature-cancel-values { grid-template-columns:1fr; }
 }
+
+.cx-action-feedback {padding:13px 16px;margin-bottom:16px;background:#edf6f5;border-left:3px solid #168594;line-height:1.7;font-size:.92rem;}
+.cx-action-feedback p {margin:8px 0 0;}
+.cx-controls input:disabled {opacity:.5;cursor:not-allowed;}
+.af-example-bridge {padding:12px 16px;background:#f0f6f7;border-left:3px solid #4b8992;font-size:.92rem;line-height:1.8;}

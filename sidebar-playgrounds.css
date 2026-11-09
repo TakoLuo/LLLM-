@@ -1,5 +1,7 @@
 /* Compact left rail; the existing shell:menu adapter controls expansion in both views. */
-.report-sidebar { --report-rail:68px; --report-sidebar:216px; --report-left:var(--report-rail); }
+/* The fixed header is a left rail, not an obstruction above the document.
+   A top scroll inset makes native text-selection autoscroll toward the page top. */
+.report-sidebar { --report-rail:68px; --report-sidebar:216px; --report-left:var(--report-rail); scroll-padding-top:0; }
 .report-sidebar.sidebar-expanded { --report-left:var(--report-sidebar); }
 .report-sidebar .site-header { position:fixed; top:0; left:0; width:var(--report-left); z-index:110; border-right:1px solid #bdced5; }
 .report-sidebar .header-inner { min-height:0; max-width:none; padding:13px 10px; flex-direction:column; align-items:stretch; gap:13px; }
