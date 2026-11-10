@@ -108,19 +108,124 @@
 }
 .cr-scene .cr-settings { margin: 14px 0; }
 
-.cr-photo-cubes { margin: 18px 0; }
-.cr-photo-cubes h4 { margin: 0 0 8px; }
-.cr-photo-cubes > a { display: block; }
-.cr-photo-cubes .cr-photo-cubes-zh,
-:root[data-language="zh"] .cr-photo-cubes-en,
-:root[data-language="bilingual"] .cr-photo-cubes-en { display: none; }
-:root:is([data-language="zh"], [data-language="bilingual"]) .cr-photo-cubes-zh { display: block; }
-.cr-photo-cubes img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 1px solid #c7dfe0;
-  border-radius: 8px;
+.cr-photo-cubes {
+  container-type: inline-size;
+  margin: 18px 0;
+  padding: clamp(12px, 2.5vw, 22px);
+  border: 1px solid #c2d7df;
+  border-radius: 12px;
+  background: #f2f7fa;
 }
-.cr-photo-cubes figcaption { margin-top: 8px; font-size: .9rem; line-height: 1.6; }
+.cr-photo-cubes h4 { margin: 0 0 6px; }
+.cr-photo-cubes p { margin: 7px 0 0; line-height: 1.55; }
+.cr-photo-flow { display: grid; gap: 25px; margin-top: 16px; }
+.cr-photo-panel {
+  position: relative;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #c1d5dc;
+  border-radius: 10px;
+  background: white;
+}
+.cr-photo-panel + .cr-photo-panel::before {
+  content: "↓";
+  position: absolute;
+  inset: -24px auto auto 50%;
+  transform: translateX(-50%);
+  color: #315e73;
+  font-weight: 800;
+}
+.cr-photo-panel h5 { margin: 0; font-size: 1rem; color: #17475e; }
+.cr-photo-panel h5 var { display: inline-block; margin-top: 3px; }
+.cr-photo-dimension { display: block; color: #426579; font-size: .82rem; }
+.cr-photo-panel p { font-size: .84rem; }
+.cr-photo-camera { background: #e7f1f6; }
+.cr-photo-response {
+  list-style: none;
+  display: grid;
+  gap: 4px;
+  margin: 14px 0;
+  padding: 0;
+  font-size: .79rem;
+}
+.cr-photo-response li { display: flex; align-items: baseline; flex-wrap: wrap; gap: 3px 7px; }
+.cr-photo-response li:nth-child(1) { color: #8e3041; }
+.cr-photo-response li:nth-child(2) { color: #246240; }
+.cr-photo-response li:nth-child(3) { color: #235d8a; }
+.cr-photo-stack {
+  --layer-size: 76%;
+  --layer-step: 8%;
+  position: relative;
+  aspect-ratio: 1;
+  max-width: 290px;
+  margin: 12px auto 0;
+}
+.cr-photo-channels { --layer-size: 80%; --layer-step: 10%; }
+.cr-photo-composite { --layer-size: 100%; }
+.cr-photo-layer {
+  position: absolute;
+  width: var(--layer-size);
+  aspect-ratio: 1;
+  inset-inline-start: calc(var(--depth) * var(--layer-step));
+  inset-block-end: calc(var(--depth) * var(--layer-step));
+  border: 1px solid #7896a5;
+  border-radius: 4px;
+  background: #172530 url("cave-balloons-photo-tiles.webp") calc(var(--tile) * 100% / 7) 50% / 800% 100% no-repeat;
+}
+.cr-photo-layer-tag,
+.cr-photo-pixel > span {
+  position: absolute;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: #fff8dc;
+  color: #16384b;
+  font-size: .73rem;
+  white-space: nowrap;
+}
+.cr-photo-layer-tag { inset: 0 0 auto auto; background: #edf6f8; }
+.cr-photo-pixel {
+  position: absolute;
+  inset: 43.16% auto auto 48.83%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border: 2px solid #ffd45a;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #302a1c;
+}
+.cr-photo-pixel > span { inset: auto auto 10px 6px; }
+.cr-photo-pixel > span::before {
+  content: "";
+  position: absolute;
+  inset: 100% auto auto 0;
+  height: 6px;
+  border-inline-start: 1px solid #ffd45a;
+}
+.cr-photo-rgb { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.cr-photo-equation {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid #c1d5dc;
+  border-radius: 10px;
+  background: white;
+}
+.cr-photo-equation math { font-size: clamp(1.1rem, 3vw, 1.65rem); }
+.cr-photo-equation dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,135px),1fr));
+  gap: 8px;
+  margin: 10px 0 0;
+}
+.cr-photo-equation dl > div { padding: 6px 8px; background: #edf5f6; border-radius: 6px; }
+.cr-photo-equation dt { font-weight: 700; color: #17475e; }
+.cr-photo-equation dd { margin: 2px 0 0; font-size: .82rem; line-height: 1.55; }
+.cr-photo-cubes figcaption { margin-top: 8px; font-size: .86rem; line-height: 1.6; }
 .cr-photo-cubes figcaption > a { display: inline-block; margin-top: 4px; }
+@container (min-width: 660px) {
+  .cr-photo-flow { grid-template-columns: minmax(0,1fr) minmax(0,.57fr) minmax(0,1.44fr); }
+  .cr-photo-panel + .cr-photo-panel::before {
+    content: "→";
+    inset: 49% auto auto -20px;
+    transform: none;
+  }
+}

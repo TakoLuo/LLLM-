@@ -131,16 +131,67 @@
   const selectedWeights = ['w_S','目前已選原子的最佳擬合倍率。','The jointly fitted weights of the selected atoms.'];
   const residual = ['r','殘差，即輸入 RGB 減去目前重建的 RGB。','The residual, obtained by subtracting the current reconstructed RGB from the input RGB.'];
   const approximately = ['≈','約等於，兩側允許有差距。','Approximately equal. The two sides may differ.'];
+  // Tile order follows the CAVE sample: four bands, three RGB channels, then the composite.
+  const photoLayer = (tile, depth, label, pixelLabel = '') => `
+    <div class="cr-photo-layer" style="--tile:${tile};--depth:${depth}">
+      ${label ? `<span class="cr-photo-layer-tag">${label}</span>` : ''}
+      ${pixelLabel ? `<span class="cr-photo-pixel"><span>${pixelLabel}</span></span>` : ''}
+    </div>`;
   const photoMeasurementFigure = `<figure class="cr-photo-cubes">
     <h4>${b(['照片對照：同一像素從 31 波段到 RGB','Photo Diagram: One Pixel from 31 Bands to RGB'])}</h4>
-    <a class="cr-photo-cubes-en" href="spectrum-to-rgb-photo-cubes-en.png" target="_blank" rel="noopener">
-      <img src="spectrum-to-rgb-photo-cubes-en.png" width="3200" height="2260" loading="lazy" alt="The same balloon pixel q is marked on a 31-band spectral image stack, three RGB channel images, and their color composite. The diagram labels the terms in the camera measurement equation.">
-    </a>
-    <a class="cr-photo-cubes-zh" href="spectrum-to-rgb-photo-cubes-zh.png" target="_blank" rel="noopener">
-      <img src="spectrum-to-rgb-photo-cubes-zh.png" width="3200" height="2260" loading="lazy" alt="同一個氣球場景的 31 波段、三層 RGB 通道和彩色相片，皆標出同一像素 q，並標註相機量測公式的符號。">
-    </a>
+    ${p(['跟著黃色圓點看同一個像素 q。左邊沿波段方向讀出光譜，右邊在同一位置讀出三個通道值。','Follow the yellow marker for pixel q. Read along the spectral bands on the left and across three RGB channels at the same position on the right.'])}
+    <div class="cr-photo-flow">
+      <section class="cr-photo-panel">
+        <h5>${b(['高光譜影像','Hyperspectral Image'])} <var>h</var></h5>
+        <span class="cr-photo-dimension">512 × 512 × 31</span>
+        <div class="cr-photo-stack" aria-hidden="true">
+          ${photoLayer(3,3,'700 nm')}${photoLayer(1,2,'460 nm')}${photoLayer(0,1,'400 nm')}${photoLayer(2,0,'550 nm','h<sub>q,16</sub>')}
+        </div>
+        ${p(['抽出 550 nm 那一層，黃點就是第 16 波段的值。沿同一位置讀完 31 層，得到像素 q 的完整光譜。','The 550 nm slice is pulled to the front. Its yellow marker is the band-16 value. Reading all 31 slices at that position gives the spectrum of pixel q.'])}
+      </section>
+      <section class="cr-photo-panel cr-photo-camera">
+        <h5>${b(['相機響應','Camera Response'])} <var>R</var></h5>
+        <span class="cr-photo-dimension">3 × 31</span>
+        <ul class="cr-photo-response" aria-hidden="true">
+          <li><b>R</b> <span>● ● ● ··· ●</span></li>
+          <li><b>G</b> <span>● ● ● ··· ●</span></li>
+          <li><b>B</b> <span>● ● ● ··· ●</span></li>
+        </ul>
+        ${p(['一列對應一個 RGB 通道，逐波段乘上權重再加總。','One row per RGB channel. Multiply by the weights band by band, then sum.'])}
+      </section>
+      <section class="cr-photo-panel">
+        <h5>${b(['RGB 影像','RGB Image'])} <var>c</var></h5>
+        <span class="cr-photo-dimension">512 × 512 × 3</span>
+        <div class="cr-photo-rgb">
+          <div>
+            <div class="cr-photo-stack cr-photo-channels" aria-hidden="true">
+              ${photoLayer(6,2,'B')}${photoLayer(5,1,'G')}${photoLayer(4,0,'R','c<sub>q,R</sub>')}
+            </div>
+            ${p(['R、G、B 各是一張通道影像。紅色層的黃點是 c 的紅色通道值。','Each of R, G, and B is a channel image. The yellow marker on the red layer shows its red channel value.'])}
+          </div>
+          <div>
+            <div class="cr-photo-stack cr-photo-composite" aria-hidden="true">${photoLayer(7,0,'','q')}</div>
+            ${p(['三層合成彩色相片。黃點的三個讀值組成 c_q。','Combine the three layers to display the color photograph. The three readings at the marker form c_q.'])}
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="cr-photo-equation">
+      <math display="block">
+        <msub><mi>c</mi><mrow><mi>q</mi><mo>,</mo><mi>k</mi></mrow></msub><mo>=</mo>
+        <munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mn>31</mn></munderover>
+        <msub><mi>R</mi><mrow><mi>k</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>×</mo>
+        <msub><mi>h</mi><mrow><mi>q</mi><mo>,</mo><mi>j</mi></mrow></msub>
+      </math>
+      <dl>
+        <div><dt>c<sub>q,k</sub></dt><dd>${b(['右側像素 q 的通道 k 讀值','Reading at pixel q in channel k on the right'])}</dd></div>
+        <div><dt>∑</dt><dd>${b(['把波段 1 到 31 的乘積加總','Sum the products over bands 1 through 31'])}</dd></div>
+        <div><dt>R<sub>k,j</sub></dt><dd>${b(['中間相機對波段 j 的通道 k 權重','Camera weight for channel k at band j'])}</dd></div>
+        <div><dt>h<sub>q,j</sub></dt><dd>${b(['左側像素 q 在第 j 層的光譜值','Spectral value at pixel q in layer j on the left'])}</dd></div>
+      </dl>
+    </div>
     <figcaption>
-      ${b(['512 × 512 是這張氣球影像的寬和高。每個像素由 31 個波段轉成 3 個 RGB 通道，寬和高維持 512 × 512。點圖可開啟大圖。','The balloon scene is 512 pixels wide and 512 pixels high. Each pixel goes from 31 spectral bands to 3 RGB channels, keeping the 512 × 512 spatial grid. Select the image to open it at full size.'])}
+      ${b(['512 × 512 是這張氣球影像的寬和高。每個像素由 31 個波段轉成 3 個 RGB 通道，寬和高維持 512 × 512。灰階波段來自 CAVE 實測資料，RGB 以示意相機響應算出。','The balloon scene is 512 pixels wide and 512 pixels high. Each pixel goes from 31 spectral bands to 3 RGB channels on the same spatial grid. The grayscale slices come from measured CAVE data. RGB uses an illustrative camera response.'])}
       <a href="https://cave.cs.columbia.edu/repository/Multispectral/Stuff" target="_blank" rel="noopener">${b(['CAVE 氣球資料來源','CAVE Balloons Data Source'])}</a>
     </figcaption>
   </figure>`;
