@@ -73,9 +73,53 @@
     equation('paper-eq-5',['原論文式 (5)','Paper Eq. (5)'],['把同一配方套回完整光譜原子','Apply the Same Recipe to Complete Spectral Atoms'],`${hq}${mo('=')}${Dh}${mi('w')}`,'Estimated query spectrum h q equals D h times w',[[ 'Dₕ',['與 RGB 字典逐欄配對的固定高光譜字典。','Fixed spectral dictionary paired column by column with the RGB dictionary.'],['31 × 500','31 × 500']],[ 'w',['剛在 RGB 空間找到的同一組係數，未選原子填 0。','The same coefficients fitted in RGB; unused positions are zero.'],['500 × 1','500 × 1']],[ 'h_q',['估計光譜；原文使用 h_q，本頁明確把它視為估計而非真值。','Estimated spectrum. The paper writes h_q; it is an estimate, not measured truth.'],['31 × 1','31 × 1']]],['即使只選少數原子，各原子也都有 31 個波段。逐波段相加後仍輸出 31 個數，不會只剩「所選原子數」個波段。','Even a small selected subset contains complete 31-band atoms. Their bandwise sum still has 31 values; output band count is not the number of selected atoms.'])+supplements('paper-eq-5',[24,31,32,37])+
     equation('paper-eq-6',['原論文式 (6)','Paper Eq. (6)'],['回投影一致，仍不等於光譜真實','Projection Consistency Is Not Spectral Truth'],`${cq}${mo('=')}${mi('R')}${hq}`,'Query RGB equals the projected estimated spectrum under an exact fit',[[ 'R',['產生 RGB 字典時使用的同一個響應矩陣。','The same response matrix used to construct the RGB dictionary.'],['3 × 31','3 × 31']],[ 'h_q',['用配對高光譜原子組合的估計。','Estimate assembled from paired spectral atoms.'],['31 × 1','31 × 1']],[ 'c_q',['要重現的 RGB 量測。','RGB measurement to reproduce.'],['3 × 1','3 × 1']]],['由 R(Dₕw)=(RDₕ)w=D_RGBw 可知：式 (4) 若精確成立，回投影就相等；若式 (4) 只是近似，這裡也只是近似。光譜是否接近真值，仍必須靠實驗比較。','Because R(Dₕw)=(RDₕ)w=D_RGBw, an exact Eq. (4) fit implies exact projection consistency; an approximate fit implies approximate consistency. Spectral accuracy still requires empirical comparison with truth.'])+supplements('paper-eq-6',[12,13,14,15,16,36,37]),[33,34,35,36,37]);
 
+  const flowBox=(title,body,role='')=>`<div class="paper-flow-box ${role}"><strong>${b(title)}</strong>${P(body)}</div>`;
+  const experimentFlow=`<section id="paper-experiment-flow" class="paper-experiment-flow" aria-labelledby="paper-experiment-flow-title">
+    <header>
+      <p class="eyebrow">§5 · ${b(['主要實驗','Main Experiment'])}</p>
+      <h3 id="paper-experiment-flow-title">${b(['實驗流程圖','Experimental Workflow'])}</h3>
+      ${P(['每輪留出一整張影像。它的 RGB 用來重建，原始高光譜留到最後評分。','Hold out one complete image per round. Use its RGB for recovery and save its original spectra for evaluation.'])}
+    </header>
+    <figure aria-labelledby="paper-experiment-flow-title">
+      ${flowBox(['100 張自然場景高光譜影像','100 Hyperspectral Images of Natural Scenes'],['每張取約 400–700 nm，整理成 31 個波段。','Use 31 bands spanning approximately 400–700 nm per image.'],'paper-flow-source')}
+      <div class="paper-flow-branches">
+        <div class="paper-flow-track paper-flow-training">
+          <h4>${b(['01　訓練字典','01  Train the Dictionary'])}</h4>
+          ${flowBox(['其餘 99 張影像','The Other 99 Images'],['每張隨機抽 1,000 個像素，共 99,000 條訓練光譜。','Randomly sample 1,000 pixels per image for 99,000 training spectra.'])}
+          ${flowBox(['K-SVD 學出光譜字典','K-SVD Learns the Spectral Dictionary'],['光譜字典有 500 個原子，每個原子含 31 個波段。','The spectral dictionary has 500 atoms, each containing 31 bands.'])}
+          ${flowBox(['投影出配對的 RGB 字典','Project the Paired RGB Dictionary'],['用相同的量測模型 R 投影光譜字典。兩本字典保留相同的原子編號。','Project the spectral dictionary through the same measurement model R. Both dictionaries keep the same atom indices.'])}
+        </div>
+        <div class="paper-flow-track paper-flow-testing">
+          <h4>${b(['02　測試與重建','02  Test and Recover'])}</h4>
+          ${flowBox(['留出 1 張完整影像','One Whole Held-Out Image'],['同一張影像走兩條路，一條產生輸入，另一條保留真值。','One path supplies the input. The other preserves the reference spectra.'])}
+          <div class="paper-flow-test-paths">
+            <div class="paper-flow-rgb-path">
+              ${flowBox(['模擬 RGB 輸入','Simulate the RGB Input'],['用 CIE 1964 色彩匹配函數把每個像素的 31 個值轉成三個 RGB 值。','Use the CIE 1964 color matching functions to turn each pixel’s 31 values into three RGB values.'])}
+              ${flowBox(['OMP 找權重，套回光譜字典','Fit Weights with OMP and Recover the Spectrum'],['在 RGB 字典選少數原子並求權重。把同一組權重用在配對的光譜原子，得到 31 波段估計。','Select a few atoms in the RGB dictionary and fit their weights. Apply the same weights to the paired spectral atoms to estimate all 31 bands.'])}
+            </div>
+            ${flowBox(['保留原始光譜','Keep the Reference Spectra'],['原本量到的 31 波段直接送往評分。','Send the original 31 measured bands straight to evaluation.'],'paper-flow-truth')}
+          </div>
+          ${flowBox(['03　評分：估計與真值比較','03  Evaluate the Estimate against the Reference'],['對照同一像素的估計與真值，彙整相對與絕對 RMSE。','Compare each estimated spectrum with its reference and summarize relative and absolute RMSE.'],'paper-flow-score')}
+        </div>
+      </div>
+      <figcaption>${b(['每張影像輪流當測試圖，從其餘影像重新抽樣、建立字典。論文對每張測試圖獨立重建數次。','Each image takes a turn as the held-out test image. Resample the remaining images and rebuild the dictionary. The paper independently reconstructs each test image several times.'])}</figcaption>
+    </figure>
+    <div class="paper-flow-footer">
+      <a href="#paper-rmse">${b(['接著看 RMSE 怎麼算 ↓','Next: How RMSE Is Calculated ↓'])}</a>
+      <details>
+        <summary>${b(['論文還做了哪些比較？','What Else Did the Paper Compare?'])}</summary>
+        <ul>
+          <li>${b(['§5.1 · 比較同領域、跨領域與外部資料集的重建結果。','§5.1 · Compare in-domain, cross-domain, and external-dataset results.'])}</li>
+          <li><a href="#paper-comparison">${b(['§5.2 · 與既有方法比較（Table 2）','§5.2 · Comparison with prior work (Table 2)'])}</a></li>
+          <li><a href="#paper-camera">${b(['§5.3 · Canon 40D 真機與模擬 RGB 的色卡實驗（Table 3）','§5.3 · ColorChecker experiment with real and simulated Canon 40D RGB (Table 3)'])}</a></li>
+        </ul>
+      </details>
+    </div>
+  </section>`;
+
   add('paper-experiments',['實驗設計、結果與原文疑點','Experiments, Results, and Reporting Caveats'],'§5 · §5.1–5.3 · Tables 1–3',
     ['用保留的高光譜真值評估，而不是看 RGB 色塊是否相同就宣布成功。','Evaluate against held-out hyperspectral truth, not just visually matching RGB swatches.'],
-    H(['驗證流程','Evaluation Protocol'])+P(['每輪留出完整影像，從其他影像抽樣學字典；測試影像的高光譜用來生成 RGB 與最後評分。原文讓每張影像輪流當測試圖，並獨立重建數次，以檢查隨機抽樣的影響。','Each round holds out a complete image and learns from sampled spectra of other images. Test HSI generates RGB and later scores the estimate. The paper cycles through held-out images and independently repeats reconstructions to account for stochastic sampling.'])+
+    experimentFlow+H(['驗證流程','Evaluation Protocol'])+P(['每輪留出完整影像，從其他影像抽樣學字典；測試影像的高光譜用來生成 RGB 與最後評分。原文讓每張影像輪流當測試圖，並獨立重建數次，以檢查隨機抽樣的影響。','Each round holds out a complete image and learns from sampled spectra of other images. Test HSI generates RGB and later scores the estimate. The paper cycles through held-out images and independently repeats reconstructions to account for stochastic sampling.'])+
     equation('paper-rmse',['指標展開說明；非原文編號公式','Metric Explanation; Not a Numbered Paper Equation'],['絕對 RMSE：估計與真值差多少？','Absolute RMSE: How Far Is the Estimate from Truth?'],`<mi>RMSE</mi>${mo('=')}<msqrt><mrow><mfrac>${mn(1)}${mi('M')}</mfrac><munderover>${mo('∑')}<mrow>${mi('ℓ')}${mo('=')}${mn(1)}</mrow>${mi('M')}</munderover>${sup(`<mrow>${mo('(')}<mover>${sub('h','ℓ')}${mo('^')}</mover>${mo('−')}${sub('h','ℓ')}${mo(')')}</mrow>`,mn(2))}</mrow></msqrt>`,'RMSE is the square root of the mean squared difference between estimated and reference values',[[ 'ĥℓ、hℓ',['第 ℓ 個待比較的估計值與真值。','The estimated and reference value for comparison item ℓ.'],['同一尺度','Same Scale']],[ 'M',['這次指標計算包含的比較項目數；不是字典大小。','Count of compared items, not dictionary size.'],['取決於評估範圍','Depends on the Evaluation Scope']],[ '平方、平均、開根號',['避免正負差距抵銷，再把結果轉回原數值尺度。','Prevent signed differences cancelling, then return to the original value scale.'],['越低越好','Lower Is Better']]],['這是標準 RMSE 的計算意義。原文另報告相對誤差：先用真值強度縮放差距，避免暗像素的絕對差距看起來過小；真值接近 0 時相對誤差敏感，零值處理不可憑空補成已知實作。','This explains standard RMSE. The paper also reports relative errors scaled by reference intensity, reducing low-intensity bias in absolute differences. Relative errors are sensitive near zero; unspecified zero handling must not be invented.'])+supplements('paper-rmse',[38,39,40,41,42])+
     H(['Table 1：完整、專用與跨領域先驗','Table 1: General, Domain-Specific, and Cross-Domain Priors'])+table([['評估條件','Evaluation Condition'],['相對 RMSE','Relative RMSE'],['絕對 RMSE（0–255）','Absolute RMSE (0–255)']],[[['完整資料集','Complete Dataset'],'0.0756','2.633'],[['公園子集','Park Subset'],'0.0589','2.105'],[['鄉村子集','Rural Subset'],'0.0354','1.582'],[['鄉村先驗 → 公園','Rural Prior → Park'],'0.0801','2.693'],[['公園先驗 → 鄉村','Park Prior → Rural'],'0.0592','3.121'],[['外部資料：室外','External Dataset: Outdoor'],'0.1231','3.466'],[['外部資料：室內','External Dataset: Indoor'],'0.5207','5.685']])+P(['上表節錄 Table 1 的不同實驗條件，不是控制所有其他變因的即時比較。專用先驗可改善相近場景；跨領域、照明、光譜範圍、暗像素與擷取差異可能一起影響結果。0.0756 是作者報告的誤差，不應直接改稱 92.44% 的準確率。','These are selected Table 1 conditions, not a controlled live comparison with every other variable fixed. Matched priors can help; domain, illumination, spectral range, darkness, and acquisition differences may jointly affect results. The reported error 0.0756 is not automatically an accuracy of 92.44%.'])+
     H(['Table 2：比較方法取得的資訊不同','Table 2: The Methods Receive Different Information'])+table([['影像／統計','Image / Statistic'],['本文','This Paper'],['Kawakami 等人 [18]','Kawakami et al. [18]']],[[['資料集平均（原文列值）','Dataset Average (Reported)'],'5.4',['未報告','Not Reported']],['Balloons','5.2','3.0'],['Beads','5.3','9.2'],['Sponges','3.1','3.7'],['Oil Painting','3.3','4.7'],['Flowers','4.2','5.4'],['CD','8.7','8.2'],['Fake/Real Peppers','5.7','4.7'],['Photo and Face','3.3','3.3']])+P(['數值為原文 0–255 尺度的 RMSE。這個比較設定讓本文每張影像取得 10,000 個同影像高光譜樣本（約 3.8%）作先驗；不能把它和主要的整張影像留出設定混為一談。Kawakami 方法則需要同場景低解析高光譜加高解析 RGB。','Values are reported RMSE on the 0–255 scale. This comparison gives the paper 10,000 same-image spectral samples per image, about 3.8%, for its prior; do not confuse it with the main whole-image holdout protocol. Kawakami’s method receives same-scene low-resolution HSI plus high-resolution RGB.'])+
