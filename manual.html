@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="從 RGB 到高光譜互動論文報告的中文操作手冊。">
+  <title>網站操作說明書｜從 RGB 到高光譜</title>
+  <link rel="stylesheet" href="manual.css?v=1">
+  <script src="concept-data.js?v=60" defer></script>
+  <script src="manual.js?v=1" defer></script>
+</head>
+<body id="top">
+  <a class="skip" href="#main">跳至說明書內容</a>
+  <header class="mast">
+    <div class="wrap mast-inner">
+      <span>從 RGB 到高光譜</span>
+      <a href="./index.html#overview">← 回到報告首頁</a>
+    </div>
+  </header>
+  <div class="wrap layout">
+    <aside class="contents" aria-label="說明書目錄">
+      <h2>操作目錄</h2>
+      <nav>
+        <a href="#quick-start">01　第一次怎麼玩</a>
+        <a href="#navigation">02　網站怎麼逛</a>
+        <a href="#pipeline">03　重建 Playground 六步</a>
+        <a href="#settings">04　三個選單怎麼選</a>
+        <a href="#other-labs">05　公式與其他互動</a>
+        <a href="#paper">06　論文各章怎麼讀</a>
+        <a href="#topics">07　48 個知識點操作索引</a>
+        <a href="#questions">08　操作卡住時</a>
+      </nav>
+    </aside>
+    <main id="main">
+      <header class="hero">
+        <p class="eyebrow">互動論文報告 · 中文操作手冊</p>
+        <h1>網站操作說明書</h1>
+        <p>每個操作都先告訴你要按哪裡，再告訴你要看哪個結果。英文介面的按鈕名稱放在中文後面，方便你對照畫面。</p>
+        <a class="button" href="#quick-start">跟著做一次 ↓</a>
+      </header>
+
+      <section id="quick-start">
+        <p class="eyebrow">01 / 快速入門</p>
+        <h2>第一次怎麼玩</h2>
+        <p>先用網站預設的範例，不必選自己的參數。核心任務是拿同一組倍率，在 RGB 端組出三個通道值，在光譜端組出 31 個波段值。</p>
+        <ol class="route">
+          <li><strong>第 4 步求倍率</strong><br>開啟 <a href="./index.html#connected-stage-3">OMP 求這個像素的係數</a>。按「下一個子步驟」兩次，看見先選原子、再更新倍率。接著按「直接求完這個 RGB」。</li>
+          <li><strong>第 5 步看同一組倍率</strong><br>按 Playground 上方的「5 相同係數產生 31 波段」。把讀取波長從 550 nm 換成 650 nm，看原子值變了、倍率維持相同。</li>
+          <li><strong>第 6 步評估結果</strong><br>在同一頁按「6 用保留真值檢查估計」，勾選「揭露保留真值與 A/C 比較」。看 A、C 的 RGB 相同，真實光譜卻不同。</li>
+        </ol>
+        <p class="note"><strong>請在同一個 Playground 內按步驟 5、6。</strong> 第 4 步求出的倍率留在目前這個分頁。重新載入，或從手冊另外開一個步驟連結，會建立新的操作狀態。</p>
+      </section>
+
+      <section id="navigation">
+        <p class="eyebrow">02 / 導覽</p>
+        <h2>網站怎麼逛</h2>
+        <dl class="definitions">
+          <div><dt>首頁與總覽 <span lang="en">Home and Overview</span></dt><dd>先看研究問題、輸入和輸出。接著往下找到「報告主線」，點「先看完整 RGB → 高光譜流程」進入核心互動。<a href="./index.html#overview">回到總覽</a></dd></div>
+          <div><dt>報告主線 <span lang="en">Presentation Route</span></dt><dd>依序閱讀研究目的、核心流程、K-SVD、OMP、驗證與結論。每頁底部可回到主線，或切換上一頁、下一頁。<a href="./index.html#report-flow">看報告主線</a></dd></div>
+          <div><dt>完整論文章節 <span lang="en">Full Paper Sections</span></dt><dd>展開側欄或首頁的完整章節索引，可以按原論文章節閱讀。需要查某條公式時，可直接到 §4.1 的式 (1)–(6)。<a href="./index.html#paper-method">看 §4.1</a></dd></div>
+          <div><dt>背景知識 <span lang="en">Background Reference</span></dt><dd>不懂術語時，點主線內有底線的術語連結，或到首頁知識點目錄選卡片。主線術語跳轉後，可用頁面提供的返回連結回原處。<a href="./index.html#knowledge-directory">看知識點目錄</a></dd></div>
+          <div><dt>語言 <span lang="en">Language</span></dt><dd>用側欄的下拉選單切換 <span lang="en">English</span>、中文或 <span lang="en">EN + 中文</span>。雙語模式多數區塊是英文在上、中文在下。</dd></div>
+          <div><dt>收起／展開導覽 <span lang="en">Collapse / Contents</span></dt><dd>側欄佔畫面時可先收起。要換章節再打開；也可從頁底的前後頁連結移動。</dd></div>
+        </dl>
+      </section>
+
+      <section id="pipeline">
+        <p class="eyebrow">03 / 核心互動</p>
+        <h2>重建 Playground 六步</h2>
+        <p>上方 1～6 是切換畫面的按鈕。每個畫面內的按鈕、滑桿和選單才會執行或查看該步驟。要回到起點，按底部「重設完整流程」（<span lang="en">Reset the Pipeline</span>）。<a href="./index.html#connected-stage-0">開啟完整流程</a></p>
+        <div class="steps">
+          <article>
+            <span class="number">1</span>
+            <h3>已知什麼、估計什麼</h3>
+            <p>這一步先讀表。<strong>c<sub>q</sub></strong> 是目前像素的三個線性 RGB 值，<strong>R</strong> 是相機響應權重表，<strong>Y</strong> 是學字典用的訓練光譜。看公式下的符號定義，再分清已知 RGB 與待估計光譜。</p>
+            <p>畫面中的 24 條訓練光譜、4 個原子和測試像素都是合成算例。論文完整實驗使用的是 500 個候選原子。</p>
+          </article>
+          <article>
+            <span class="number">2</span>
+            <h3>K-SVD 學這本字典</h3>
+            <ol>
+              <li>把「完成幾次迭代？」（<span lang="en">Completed Iterations</span>）設成 0，查看起始字典。再按「做下一次迭代」（<span lang="en">Run the Next Iteration</span>）。「逐輪播放」會從第 0 輪開始播放。</li>
+              <li>選一個原子（例如 d1），對照更新前後的兩條曲線。每條曲線都包含完整的 31 波段。</li>
+              <li>往下看 SVD 的固定樣本名單。選一筆有列入的樣本，比較「原本的光譜 − 其他原子的貢獻」與「新曲線 × 新倍率」。再選一筆名單外的樣本，確認它在這次更新中對應的倍率保持 0。</li>
+            </ol>
+            <p><strong>要看什麼：</strong>原子曲線怎麼改，以及訓練平方差 <strong>L<sub>train</sub></strong> 在這個更新前後的差。讀取另一個原子或樣本只是查看，改迭代輪數才會換用不同輪次的字典。</p>
+          </article>
+          <article>
+            <span class="number">3</span>
+            <h3>同一本字典投影成 RGB</h3>
+            <p>選一個原子，再選一個波段。看表格的「原子值 × 通道權重」和「完整 31 項和」。換波段只會改變你正在讀的那一項；完整 RGB 是全部 31 項加完的結果。</p>
+            <p><strong>要看什麼：</strong>原子 1 的 31 波段曲線，與原子 1 的三個 RGB 值是成對的。下一步使用 RGB 版本，第 5 步使用光譜版本。</p>
+          </article>
+          <article>
+            <span class="number">4</span>
+            <h3>OMP 求這個像素的係數</h3>
+            <ol>
+              <li>按「下一個子步驟」（<span lang="en">Next Substep</span>）。星號標示本輪選到的原子，這時仍沿用上一個擬合的倍率。</li>
+              <li>再按一次，觀察所有已選原子的倍率共同更新，以及 RGB 平方差 <strong>L<sub>RGB</sub></strong>。第三個子步驟把剩下的 RGB 差值交給下一輪選擇。</li>
+              <li>按「直接求完這個 RGB」（<span lang="en">Finish This RGB Fit</span>）可直接看到最終係數。要重看選擇過程，按「重播這個 RGB」（<span lang="en">Replay This RGB</span>）。</li>
+            </ol>
+            <p><strong>要看什麼：</strong>表格的分數是用來挑原子的，係數是最後乘上原子的倍率。輸入 RGB 和字典固定時，演算法會用目前的殘差選原子，並重算所有已選倍率。</p>
+          </article>
+          <article>
+            <span class="number">5</span>
+            <h3>相同係數產生 31 波段</h3>
+            <p>求完係數後，選一個要看的波段。對照每列「該波段的原子值 × 原子的倍率」，再把這欄貢獻相加。圖表是把同一操作套到所有 31 波段的結果。</p>
+            <p><strong>要看什麼：</strong>例如預設起點、3 輪、像素 A、上限 2，550 nm 約是 <strong>0.05142 × 0.68938 + 0.06176 × 0.27168 ≈ 0.05222</strong>。換波段只會讀出另一組原子值，兩個倍率會沿用。</p>
+          </article>
+          <article>
+            <span class="number">6</span>
+            <h3>用保留真值檢查估計</h3>
+            <p>先比對輸入 RGB 和估計光譜投回去的 RGB。再勾「揭露保留真值與 A/C 比較」（<span lang="en">Reveal Held-Out Truth and A/C Comparison for Evaluation Only</span>），查看兩條完整曲線及 RMSE。</p>
+            <p><strong>要看什麼：</strong>RGB 殘差在比三個通道。光譜 RMSE 則在比 31 個波段與獨立真值。A、C 的 RGB 相同、估計相同，兩個真值不同，所以光譜誤差可以不同。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="settings">
+        <p class="eyebrow">04 / 實驗設定</p>
+        <h2>三個選單怎麼選</h2>
+        <p>展開「固定條件與可改參數」（<span lang="en">Fixed Conditions and Editable Parameters</span>）。每個選單下方會顯示目前選項的意思。一次只改一個欄位，比較前後結果會比較容易。</p>
+        <dl class="definitions">
+          <div><dt>起始字典 <span lang="en">Initial Dictionary</span></dt><dd><span lang="en">Spread in RGB</span> 選 RGB 值較分散的四條光譜作起點；<span lang="en">Seeded Start B</span>、<span lang="en">Seeded Start C</span> 各以一套固定抽選規則選四條。三個起點都用同一批 24 條光譜學習。比較時到第 2 步固定輪數，看學到的曲線和訓練平方差。</dd></div>
+          <div><dt>新像素 <span lang="en">Held-Out Query Pixel</span></dt><dd><strong>A</strong> 是預設測試像素，<strong>B</strong> 有另一組 RGB，<strong>C</strong> 和 A 的 RGB 相同但真實光譜不同。這個選單換的是 OMP 收到的目標像素，字典維持同一本。</dd></div>
+          <div><dt>RGB 最多使用原子數 <span lang="en">RGB Atom Cap s</span></dt><dd>選 1、2 或 3，就是允許 OMP 最多用幾條原子曲線。達到停止條件時可以用得更少。這個上限屬於新像素重建，訓練階段仍是每筆最多用兩個原子。</dd></div>
+        </dl>
+        <div class="note"><strong>可以自己做一次比較。</strong> 保持起始字典和像素 A 不變，把上限改成 1，再到第 4 步按「直接求完這個 RGB」，記下非零係數和 RGB 平方差。再把上限改成 2 並重新求解。用第 6 步的光譜 RMSE 比較光譜準確度。</div>
+        <p>更改起點、迭代輪數、像素或原子上限後，舊倍率會清除。回第 4 步重新求解；第 5、6 步若出現「先求完係數，再查看結果」，也可從該處直接求完。</p>
+      </section>
+
+      <section id="other-labs">
+        <p class="eyebrow">05 / 公式操作</p>
+        <h2>公式、動畫和其他互動</h2>
+        <dl class="definitions">
+          <div><dt>符號定義與公式說明</dt><dd>先讀公式下方的「符號定義」（<span lang="en">Symbol Definitions</span>）。要看詳細計算、合成算例或限制，再展開「公式說明」（<span lang="en">Equation Details</span>）。例如 c<sub>q</sub> 的 q 是像素編號，h<sub>j</sub> 的 j 是波段編號。</dd></div>
+          <div><dt>概念互動與公式代入</dt><dd>有兩種視圖的區塊，可以切回概念示意，或選「公式代入」（<span lang="en">Equation Playground</span>）實際修改數值。看公式下的代入結果、曲線或表格。需要復原時，按「重設公式範例」（<span lang="en">Reset Equation Example</span>），它只重設該算例。</dd></div>
+          <div><dt>讀取與修改</dt><dd>寫「查看」或「讀取」的控制是換一個要看的波段、原子或像素。寫「改訊號」、「改權重」或「調角度」的控制會改算式的輸入。以第 8 點為例，移動讀取線只是查看乘積；勾選波段才會改部分和。</dd></div>
+          <div><dt>K-SVD 連續動畫</dt><dd>按「播放 K-SVD 動畫（9 秒）」，看青色原子連續轉向，以及紫色重建差怎麼變。可暫停、重播或用前後步驟查看計算。</dd></div>
+          <div><dt>自動步驟</dt><dd>OMP 依序展示選擇、重算與更新殘差。RGB 展示乘積累加，RMSE 展示相減、平方、平均與開根號。</dd></div>
+          <div><dt>較早的固定字典算例</dt><dd>在重建頁的主流程下方展開「較早的固定字典算例（獨立補充）」。打開「修改輸入與上限」，可選示範輸入或自訂 0～1 的線性 RGB，再按「估計權重」（<span lang="en">Estimate Weights</span>）。這裡的字典固定，適合練習自訂輸入後怎麼重算。</dd></div>
+        </dl>
+        <h3>各種公式操作要看哪個結果</h3>
+        <ul class="lookup">
+          <li><a href="./index.html#concept-08-lab-workspace">RGB 加權和</a>：切通道，改一個波段的 h<sub>j</sub>，再增加累加項數。看這一項的乘積如何影響通道輸出。概念視圖可以自由勾選波段。</li>
+          <li><a href="./index.html#concept-11-lab-workspace">Gamma 顯示換算</a>：調線性通道值，看做次方、乘 255、四捨五入之後的顯示值。</li>
+          <li><a href="./index.html#concept-24-lab-workspace">兩條路徑的權重轉移</a>：改原子倍率，再換一個輸出波段，查看「先組光譜再投影」和「直接組 RGB」的結果。</li>
+          <li><a href="./index.html#concept-28-lab-workspace">K-SVD 扣除其他原子</a>：選訓練樣本，依序看原始量測、其他原子貢獻和相減後的剩餘量。</li>
+          <li><a href="./index.html#concept-29-lab-workspace">SVD 方向與係數</a>：先拖方向角度，觀察總平方差，再按「套用 SVD 最佳方向與係數」。</li>
+          <li><a href="./index.html#concept-33-lab-workspace">OMP 原子評分</a>：選輪次和候選原子，讀殘差與原子的通道乘積，再用「查看最大合格分數」對照選擇。</li>
+          <li><a href="./index.html#concept-34-lab-workspace">OMP 共同擬合</a>：先調已選原子的倍率，再按「求解 arg min：一起重算權重」。比對手動設定與共同最小平方解的誤差。</li>
+          <li><a href="./index.html#concept-35-lab-workspace">OMP 停止條件</a>：改最多原子數及殘差長度門檻，觀察哪一個條件讓示例停下來。</li>
+          <li><a href="./index.html#concept-37-lab-workspace">RMSE 逐項計算</a>：選要修改的估計值，調大小，再選高亮相減、平方、平均或開根號。看真值固定時改一個估計會怎麼影響 RMSE。</li>
+        </ul>
+        <p>論文章節也提供四個同類公式操作入口。可依目前要講的段落進入 <a href="./index.html#paper-paired-playground-workspace">RGB 投影</a>、<a href="./index.html#paper-subtract-playground-workspace">K-SVD 相減</a>、<a href="./index.html#paper-transfer-playground-workspace">權重轉移</a> 或 <a href="./index.html#paper-rmse-playground-workspace">RMSE</a>。</p>
+        <p class="note">這些獨立算例各有自己的輸入和重設按鈕。想追蹤同一筆輸入從第 4 步到第 6 步，請在主線 Playground 裡操作。</p>
+      </section>
+
+      <section id="paper">
+        <p class="eyebrow">06 / 章節定位</p>
+        <h2>論文各章怎麼讀</h2>
+        <p>每章各解決一個問題。主線適合按順序理解方法，完整章節則方便你回頭查原式、資料設定與結果。</p>
+        <ul class="lookup chapters">
+          <li><a href="./index.html#paper-introduction">§1 引言</a>：讀研究問題、為何需要這個方法，以及 RGB 輸入與光譜輸出。</li>
+          <li><a href="./index.html#paper-related">§2 相關研究</a>：對照各類方法需要的硬體、照明或額外高光譜資訊。</li>
+          <li><a href="./index.html#paper-prior">§3 自然影像的高光譜先驗</a>：找先驗從哪裡來、波段怎麼整理及訓練像素怎麼抽樣。</li>
+          <li><a href="./index.html#paper-rationale">§4 從 RGB 估計高光譜</a>：讀為何三個 RGB 量測對 31 波段會有多個候選。</li>
+          <li><a href="./index.html#paper-method">§4.1 稀疏字典先驗估計光譜</a>：查原文式 (1)–(6)，看兩本成對字典、係數求解和回投影如何接上。</li>
+          <li><a href="./index.html#paper-ksvd">K-SVD 演算法詳解</a>：看固定資料、交替更新、扣除其他原子和 SVD。用示例追一個原子更新。</li>
+          <li><a href="./index.html#paper-omp">OMP 演算法詳解</a>：看殘差、候選分數、已選權重共同重算與停止條件。這裡的例題和主流程使用各自的設定。</li>
+          <li><a href="./index.html#paper-implementation">§5 實作與結果</a>：先讀實驗配置、字典大小、訓練與測試各用哪些資料。</li>
+          <li><a href="./index.html#paper-experiments">§5.1 實驗結果</a>：讀真值、估計值、誤差公式及結果表，注意比較哪一種資料條件。</li>
+          <li><a href="./index.html#paper-comparison">§5.2 與既有方法比較</a>：先看各方法拿得到哪些資料，再讀報告的誤差。</li>
+          <li><a href="./index.html#paper-camera">§5.3 消費型 RGB 相機</a>：讀相機響應、模型差異和實際拍攝的條件。</li>
+          <li><a href="./index.html#paper-conclusion">§6 意義與總結</a>：回顧何時能做估計、先驗有何作用，以及如何驗證估計。</li>
+        </ul>
+      </section>
+
+      <section id="topics">
+        <p class="eyebrow">07 / 查找操作</p>
+        <h2>48 個知識點操作索引</h2>
+        <p>可輸入編號、中文、英文或關鍵字。展開項目就能看到怎麼操作、要觀察什麼，再點連結到對應頁。</p>
+        <form class="search" role="search" id="topic-search">
+          <label for="topic-query">搜尋知識點</label>
+          <div class="search-row"><input id="topic-query" type="search" placeholder="例如：08、相機、OMP、誤差" autocomplete="off" aria-controls="topic-list"><button id="clear-query" type="button">清除</button></div>
+        </form>
+        <p id="topic-count" class="subtle" role="status"></p>
+        <div id="topic-list"></div>
+        <noscript><p>開啟瀏覽器的 JavaScript，即可搜尋並展開各知識點。<a href="./index.html#knowledge-directory">前往報告的知識點目錄</a></p></noscript>
+      </section>
+
+      <section id="questions">
+        <p class="eyebrow">08 / 常見操作問題</p>
+        <h2>操作卡住時</h2>
+        <dl class="definitions">
+          <div><dt>第 5、6 步沒畫出光譜</dt><dd>先求完第 4 步的 OMP 係數。改過設定後要重新求解，因為第 5 步會沿用這次的係數。</dd></div>
+          <div><dt>切換波段，怎麼有些數字沒變？</dt><dd>讀取波段多半是在同一份結果中換位置。例如第 3 步的完整 RGB 是 31 項總和，第 5 步的權重是整條光譜共用的。改輸入、改權重或改勾選項目才會改這些結果。</dd></div>
+          <div><dt>第 6 步怎麼沒有真值與光譜 RMSE？</dt><dd>先完成求解，再勾「揭露保留真值與 A/C 比較」。這個勾選只顯示評分資料，重建仍使用先前求出的倍率。</dd></div>
+          <div><dt>畫面沒有和講解用一樣的數字</dt><dd>先確認使用的是同一個範例，並對照起點、迭代輪數、像素和原子上限。主流程與獨立公式算例分開計算。要重跑預設結果，可按各算例的重設按鈕。</dd></div>
+          <div><dt>0.000000000 代表已知道真實光譜嗎？</dt><dd>先看這是哪一個誤差。若是 RGB 平方差，代表 RGB 在顯示精度下吻合。要判斷整條光譜是否準確，請看與獨立真值比較的光譜 RMSE。</dd></div>
+          <div><dt>回到首頁後找不到剛才的內容</dt><dd>使用側欄回到原章節，或從本說明書按相應連結。網址結尾的 <code>#</code> 片段指向章節或知識點，可以收藏直接入口。</dd></div>
+        </dl>
+      </section>
+      <footer class="end"><a href="#top">↑ 回到說明書開頭</a><a href="./index.html#overview">回到報告首頁 →</a></footer>
+    </main>
+  </div>
+</body>
+</html>

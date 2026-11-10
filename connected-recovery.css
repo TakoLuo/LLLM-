@@ -65,3 +65,45 @@
 }
 .cr-steps li + li { margin-top: .6rem; }
 .cr-lowest { color: #075963; }
+
+.cr-stage-intro {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  background: #f0f7f5;
+  border: 1px solid #c7dfe0;
+  border-radius: 8px;
+}
+.cr-stage-intro h4 { margin: 0 0 7px; }
+.cr-stage-intro dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 215px), 1fr));
+  gap: 8px 14px;
+  margin: 0 0 12px;
+}
+.cr-stage-intro dt { font-weight: 750; color: #214e60; }
+.cr-stage-intro dd {
+  margin: 3px 0 0;
+  font-size: .88rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.cr-stage-example {
+  padding: 10px 12px;
+  background: #fff;
+  border-inline-start: 3px solid #087f8c;
+  border-radius: 4px;
+}
+.cr-stage-example p,
+.cr-operation-hint p {
+  margin: 4px 0 0;
+  font-size: .9rem;
+  line-height: 1.65;
+}
+.cr-operation-hint {
+  padding: 10px 12px;
+  margin: 12px 0;
+  background: #fff6e8;
+  border-inline-start: 3px solid #bc8b45;
+  border-radius: 4px;
+}
+.cr-scene .cr-settings { margin: 14px 0; }

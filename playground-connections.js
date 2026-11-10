@@ -131,8 +131,12 @@
   function initialize(){
     for(const cfg of configs){
       const root=document.getElementById(cfg.id);if(!root)throw new Error(`Missing mainline Playground: ${cfg.id}`);
-      const panel=document.createElement('aside');panel.className='pa-panel';panel.dataset.i18nSkip='';root.querySelector(':scope > header').after(panel);
+      const panel=document.createElement('aside');panel.className='pa-panel';panel.dataset.i18nSkip='';
+      const navigation = root.querySelector(':scope > .af-navigation');
+      const result = root.querySelector(':scope > .af-result');
+      (result || navigation || root.querySelector(':scope > header')).after(panel);
       const catalog=document.createElement('details');catalog.className='pa-catalog';catalog.dataset.i18nSkip='';catalog.innerHTML=`<summary>${b(['查看本 Playground 的全部操作對照','Inspect All Action–Equation Mappings'])}</summary><p>${b(cfg.goal)}</p>${[...(cfg.stages==='ksvd'?stagesK:cfg.stages==='omp'?[ompSelect,ompFit,ompResidual]:cfg.stages==='subtract'?subtractStages:cfg.stages==='alternating'?alternatingStages:[]),...cfg.actions].map(r=>`<article><strong>${b(r.label)}</strong><div class="pa-formula">${mark(r.formula)}</div><p>${b(r.meaning)}</p></article>`).join('')}<p>${b(['播放、上一步及下一步依目前階段揭示對應運算；重設恢復預設值。展開表格只改可見性。標示為資料讀取、假設或實驗條件的互動，不會被當作最佳化或新增的原文編號公式。','Playback, previous, and next reveal the equation for the current stage; reset restores defaults. Expanding a table changes visibility only. Data inspection, assumptions, and protocol controls are not presented as optimization or new numbered paper equations.'])}</p></details>`;panel.after(catalog);
+      if (navigation) navigation.before(catalog);
       const m={cfg,root,panel,last:null,pending:false};states.set(cfg.id,m);paint(m);
       const observer=new MutationObserver(()=>schedule(m));root.querySelectorAll('.concept-lab-mount').forEach(mount=>observer.observe(mount,{childList:true,subtree:true,attributes:true,attributeFilter:['data-af-step','aria-pressed']}));
     }
