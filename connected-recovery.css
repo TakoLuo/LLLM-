@@ -107,3 +107,20 @@
   border-radius: 4px;
 }
 .cr-scene .cr-settings { margin: 14px 0; }
+
+.cr-photo-cubes { margin: 18px 0; }
+.cr-photo-cubes h4 { margin: 0 0 8px; }
+.cr-photo-cubes > a { display: block; }
+.cr-photo-cubes .cr-photo-cubes-zh,
+:root[data-language="zh"] .cr-photo-cubes-en,
+:root[data-language="bilingual"] .cr-photo-cubes-en { display: none; }
+:root:is([data-language="zh"], [data-language="bilingual"]) .cr-photo-cubes-zh { display: block; }
+.cr-photo-cubes img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #c7dfe0;
+  border-radius: 8px;
+}
+.cr-photo-cubes figcaption { margin-top: 8px; font-size: .9rem; line-height: 1.6; }
+.cr-photo-cubes figcaption > a { display: inline-block; margin-top: 4px; }
